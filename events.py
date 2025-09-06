@@ -294,18 +294,22 @@ def parse_no_cert ( log_line ) :
 
 
 
+# done
 def parse_setup_error ( log_line ) :
   # example :
   # 2025-07-31 13:22:08.033985 +0000 FLOW_LOG (info) LOG [dv879:15] BEGIN END parent=dv879:0 logSeverity=3 logText=LOG_SERVER: [C11] Connection aborted due to internal setup error sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=766
   #print ( f"setup error |{log_line}|" )
   event = new_event ( )
 
-  pattern = date_time 
+  pattern = date_time + skip + brackets + skip + parent + skip + brackets
   match = re.match ( pattern, log_line)
   if match :
     event['type']          = 'setup_error'
     event['timestamp']     = match.group(1) + ' ' + match.group(2)
     event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
+    event['id']            = match.group(3)
+    event['parent']        = match.group(4)
+    event['connection_id'] = match.group(5)
 
   #print ( f"\nmatch: internal setup error |{log_line}|" )
   #pprint.pprint ( event )
