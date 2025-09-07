@@ -99,16 +99,6 @@ for site in sites :
   site['events'] = sorted_events
   previous_micro = 0
   for event in site['events'] :
-    #pprint.pprint ( event ) 
-    micros = event['epoch_micros']
-    if micros == None :
-      print ( "event with no micros:" )
-      print ( event )
-      sys.exit(0)
-    print ( micros )
-    if micros < previous_micro :
-      print ( "out of order" )
-      sys.exit(0)
-    previous_micro = micros
+    pprint.pprint ( event ) 
 
 
