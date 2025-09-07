@@ -87,5 +87,28 @@ for site_dir in site_dirs :
 
 #pprint.pprint ( sites, indent=2, width=60 )
 
+print ( "main -- calling find_router_connections_accepted" )
 events.find_router_connections_accepted ( root_path, sites )
 events.find_begin_end_lines ( sites )
+
+print ( "\n\n" )
+for site in sites :
+  print ( f"SITE: {site['name']} ============================================" )
+  events = site['events']
+  sorted_events = sorted(events, key=lambda x: x['epoch_micros'])
+  site['events'] = sorted_events
+  previous_micro = 0
+  for event in site['events'] :
+    #pprint.pprint ( event ) 
+    micros = event['epoch_micros']
+    if micros == None :
+      print ( "event with no micros:" )
+      print ( event )
+      sys.exit(0)
+    print ( micros )
+    if micros < previous_micro :
+      print ( "out of order" )
+      sys.exit(0)
+    previous_micro = micros
+
+

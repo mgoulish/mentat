@@ -19,9 +19,10 @@ parent     = r'parent=([^ ]+)'
 brackets   = r'\[([^ ]+)\]'
 endpoint   = r'(\d+\.\d+\.\d+\.\d+:\d+)'    # 254.12.22.23:55671
 host_port  = r'([a-zA-Z\.-]+:\d+)'          # skupper-silm-mongodb.legacy.ocp-prd-wyn.bell.corp.bce.ca:30411
+hostname   = r'([a-zA-Z0-9\.-]+)'           # skupper-silm-mongodb.legacy.ocp-prd-wyn.bell.corp.bce.ca
 port_only  = r'to (:\d+)'
 message    = r'(.*?)'
-
+string     = r'(\S+)'
  
 
 
@@ -57,15 +58,29 @@ def new_event ( ) :
   return event
 
 
+# TODO change all these hostnames to just strings.
+# TODO put else clauses on all parsing match paragraphs
 
-def parse_connection_accepted_line (line):
-    event = new_event ( )
-    pattern = r'^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2}\.\d{6} \+\d{4}) SERVER \(info\) \[(\w+)\] Accepted connection to (\S+) from ([0-9a-fA-F:.]+:\d+)$'
-    match = re.match(pattern, line)
-    if match:
-        timestamp_str = f"{match.group(1)} {match.group(2)}"
-    #print ( f"parse_connection_accepted_line   {event}" )
+# example:
+#2025-08-01 13:07:22.267199 +0000 SERVER (info) [C65149] Accepted connection to localhost:5672 from 127.0.0.1:51274
+def parse_connection_accepted_line (log_line):
+  event = new_event ( )
+  #pattern = date_time + skip + brackets + "Accepted connection " + port_only + " from " + endpoint
+  pattern = date_time + skip + brackets + skip + "Accepted connection to " + string + " from " + string
+  match   = re.match(pattern, log_line)
+  if match:
+    event['type']          = 'connection_accepted'
+    event['timestamp']     = match.group(1) + ' ' + match.group(2)
+    event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
+    event['connection_id'] = match.group(3)
+    event['to']            = match.group(4)
+    event['from']          = match.group(5)
+
+    #print ( f"match: connection accepted: |{log_line}|" )
+    #pprint.pprint ( event )
     return event
+  else :
+    print ( f"connection accepted match failed on line: {log_line}" )
         
 
 
@@ -86,11 +101,11 @@ def find_router_connections_accepted ( root_path, sites ) :
       site['router_log_files'].append ( router_log_file )
       #print ( f"log file: {router_log_file}" )
       accepted_lines = get_matching_lines ( router_log_file, "Accepted" )
-      #print ( f"There are {len(accepted_lines)} matching lines." )
+      print ( f"There are {len(accepted_lines)} connection accepted lines." )
       for line in accepted_lines :
         #print ( line )
         event = parse_connection_accepted_line ( line )
-        event['router_pod_name'] = router_pod_name
+        #event['router_pod_name'] = router_pod_name  # TODO router names in all event structs
         #connection_accepted_dicts.append ( parsed_line )
         site ['events'].append ( event )
       #print ( f"read_router_connections_accepted: There are {len(connection_accepted_dicts)} parsed lines" )
@@ -109,7 +124,7 @@ def parse_unknown_protocol ( log_line ) :
   event = new_event ( )
   match = re.match ( pattern, log_line)
   if match:
-    event['type']          = 'connection_failed'
+    event['type']          = 'unknown_protocol'
     event['line']          = log_line
     event['timestamp']     = match.group(1) + ' ' + match.group(2)
     event['brackets']      = match.group(3)
@@ -130,10 +145,10 @@ def parse_no_route_to_host ( log_line ) :
   # 2025-07-31 13:25:17.088145 +0000 FLOW_LOG (info) LOG [lmzhp:1686] BEGIN END parent=lmzhp:0 logSeverity=3 logText=LOG_SERVER: [C1718] Connection to 254.14.21.121:55671 failed: proton:io No route to host - disconnected 254.14.21.121:55671 sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
   pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + endpoint + message + " sourceFile"
   event = new_event ( )
-  event['type']         = 'connection_failed'
 
   match = re.match ( pattern, log_line)
   if match :
+    event['type']          = 'no_route_to_host'
     event['timestamp']     = match.group(1) + ' ' + match.group(2)
     event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
     event['id']            = match.group(3)
@@ -176,7 +191,7 @@ def parse_connection_reset_by_peer ( log_line ) :
   # print ( f"match: Connection reset by peer |{log_line}|" )
   event = new_event ( )
 
-  pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + endpoint
+  pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + string
   match = re.match ( pattern, log_line)
   if match :
     event['type']          = 'connection_reset_by_peer'
@@ -198,10 +213,12 @@ def parse_connection_reset_by_peer ( log_line ) :
 def parse_unexpected_eof ( log_line ) :
   # example :
   # 2025-07-31 13:22:58.374561 +0000 FLOW_LOG (info) LOG [lmzhp:20] BEGIN END parent=lmzhp:0 logSeverity=3 logText=LOG_SERVER: [C7] Connection to 254.14.21.121:55671 failed: amqp:connection:framing-error SSL Failure: error:0A000126:SSL routines::unexpected eof while reading sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
+  # 2025-07-31 13:22:58.404151 +0000 FLOW_LOG (info) LOG [dv879:480] BEGIN END parent=dv879:0 logSeverity=3 logText=LOG_SERVER: [C13] Connection to skupper-silm-mongodb.legacy.ocp-prd-wyn.bell.corp.bce.ca:30411 failed: amqp:connection:framing-error SSL Failure: error:0A000126:SSL routines::unexpected eof while reading sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
   #print ( f"unexpected eof |{log_line}|" )
   event = new_event ( )
 
-  pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + endpoint
+  #pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + endpoint
+  pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + string
   match = re.match ( pattern, log_line)
   if match :
     event['type']          = 'unexpected_eof'
@@ -211,9 +228,10 @@ def parse_unexpected_eof ( log_line ) :
     event['parent']        = match.group(4)
     event['connection_id'] = match.group(5)
     event['to']            = match.group(6)
-
-  #print ( f"\nmatch: unexpected eof |{log_line}|" )
-  #pprint.pprint ( event )
+    #print ( f"\nmatch: unexpected eof |{log_line}|" )
+    #pprint.pprint ( event )
+  else :
+    print ( f"parse_unexpected_eof match failure on line: {log_line}" )
 
   return event
 
@@ -318,21 +336,26 @@ def parse_setup_error ( log_line ) :
 
 
 
+# done
 def parse_direction_outgoing ( log_line ) :
   # example :
   # 2025-07-31 13:23:31.032207 +0000 FLOW_LOG (info) LINK [lmzhp:11] BEGIN END parent=lmzhp:0 mode=interior name=skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 linkCost=1 direction=outgoing
   #print ( f"direction outgoing |{log_line}|" )
   event = new_event ( )
 
-  pattern = date_time 
+  pattern = date_time + skip + brackets + skip + parent + skip + "name=" + hostname
   match = re.match ( pattern, log_line)
   if match :
     event['type']          = 'direction_outgoing'
     event['timestamp']     = match.group(1) + ' ' + match.group(2)
     event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
+    event['id']            = match.group(3)
+    event['parent']        = match.group(4)
+    event['to']            = match.group(5)
 
-  #print ( f"\nmatch: connection timed out |{log_line}|" )
+  #print ( f"\nmatch: direction outgoing |{log_line}|" )
   #pprint.pprint ( event )
+  #print ( event )
 
   return event
 
@@ -355,16 +378,21 @@ def parse_BEGIN_END_line ( log_line ) :
     "direction=outgoing"           : parse_direction_outgoing,
   }
 
+  if "2025-07-31 13:23:30.769566" in log_line :
+    print ( f"Here is the line! {log_line}" )
+
   for error, handler in error_handlers.items():
     if error in log_line:
+      print ( f"line handled by: {error}" )
       return handler ( log_line )
 
+  print ( f"parse_BEGIN_END_line: unhandled line: {log_line}" )
   return None
 
 
 
 def find_begin_end_lines ( sites ) :
-  print ( "lookig for BEGIN END lines -------------------------------------")
+  print ( "looking for BEGIN END lines -------------------------------------")
   for site in sites :
     print ( f"site {site['name']} " )
   
