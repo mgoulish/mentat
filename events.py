@@ -410,7 +410,7 @@ def parse_BEGIN_END_line ( log_line ) :
 
   for error, handler in error_handlers.items():
     if error in log_line:
-      print ( f"line handled by: {error}" )
+      #print ( f"line handled by: {error}" )
       return handler ( log_line )
 
   print ( f"parse_BEGIN_END_line: unhandled line: {log_line}" )

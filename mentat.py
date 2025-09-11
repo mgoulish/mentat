@@ -9,6 +9,7 @@ import pprint
 from   datetime import datetime
 
 import events
+import config
 
 
 
@@ -26,14 +27,6 @@ def new_event ( ) :
            'to' ]
   event = dict.fromkeys ( keys, None )
   return event
-
-
-
-def get_dirs ( root ) :
-    return [
-        dir for dir in os.listdir ( root )
-        if os.path.isdir ( os.path.join (root, dir) )
-    ]
 
 
 
@@ -72,8 +65,19 @@ def get_site_routers ( site_path ) :
 #================================================================
 
 root_path =  sys.argv[1] 
-print (f"main: root_path: {root_path}") 
-site_dirs = get_dirs ( root_path ) 
+network   = config.new_network ( root_path )
+config.read_network ( network )
+
+print ( "\nmain: network:" )
+pprint.pprint ( network )
+
+sys.exit(0)
+
+
+
+
+
+
 sites = []
 
 for site_dir in site_dirs :
@@ -99,6 +103,7 @@ for site in sites :
   site['events'] = sorted_events
   previous_micro = 0
   for event in site['events'] :
-    pprint.pprint ( event ) 
+    if event['type'] == "connection_accepted" :
+      print ( f"rpn: {event['router_pod_name']}    from: {event['from']}    to: {event['to']}" )
 
 
