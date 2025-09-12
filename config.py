@@ -54,10 +54,10 @@ def read_skupper_site_yaml ( site, file_name ) :
     yaml_data = yaml.safe_load ( file )
     yaml_data_data = yaml_data['data']
 
-    if 'name' in yaml_data_data :
-      site['name'] = yaml_data_data['name']
-    else :
-      print ( "read_site error: name not found" )
+    #if 'name' in yaml_data_data :
+      #site['name'] = yaml_data_data['name']
+    #else :
+      #print ( "read_site error: name not found" )
     
     if 'ingress-host' in yaml_data_data:
       site['ingress-host'] = yaml_data_data['ingress-host']
@@ -96,10 +96,11 @@ def read_skupper_internal_yaml ( site, file_name ) :
 
 
 
-def read_site ( network, dir ) :
-  site = new_site ( dir )
-  print ( f"\nread_site at {dir}" )
-  config_dir = dir + '/configmaps'
+def read_site ( network, dir_name ) :
+  site = new_site ( dir_name )
+  site['name'] = dir_name.split('/')[-1]
+  print ( f"\nread_site at {dir_name}" )
+  config_dir = dir_name + '/configmaps'
 
   # skupper-site.yaml ----------------------------------------
   file_name = config_dir + '/skupper-site.yaml'
@@ -111,6 +112,8 @@ def read_site ( network, dir ) :
 
   print ( "read_site: " )
   pprint.pprint ( site )
+
+  network['sites'].append(site)
 
       
 

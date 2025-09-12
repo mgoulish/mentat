@@ -10,6 +10,7 @@ from   datetime import datetime
 
 import events
 import config
+import connectivity as conn
 
 
 
@@ -71,11 +72,15 @@ config.read_network ( network )
 print ( "\nmain: network:" )
 pprint.pprint ( network )
 
+print ( "\nmain: make connectons:\n" )
+conn.make_connections ( network['sites'] )
+
 sys.exit(0)
 
 
 
 
+# OLD CODE  vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
 
 sites = []
