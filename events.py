@@ -85,7 +85,7 @@ def parse_connection_accepted_line (log_line):
 
 
 def find_router_connections_accepted ( root_path, sites ) :
-  print ( "looking for connections accepted lines -------------------------------------")
+  print ( "\nlooking for connections accepted lines -------------------------------------")
   for site in sites :
     site_name = site['name']
     site['router_log_files'] = []
@@ -101,13 +101,15 @@ def find_router_connections_accepted ( root_path, sites ) :
       site['router_log_files'].append ( router_log_file )
       #print ( f"log file: {router_log_file}" )
       accepted_lines = get_matching_lines ( router_log_file, "Accepted" )
-      print ( f"There are {len(accepted_lines)} connection accepted lines." )
+      print ( f"  there are {len(accepted_lines)} connection accepted lines." )
       for line in accepted_lines :
         #print ( line )
         event = parse_connection_accepted_line ( line )
         event['router_pod_name'] = router_pod_name
         #connection_accepted_dicts.append ( parsed_line )
         site ['events'].append ( event )
+        print ( f"found {event['type']}" )
+        #print ( f"find_router_connections_accepted:  site {site['name']} now has {len(site['events'])} events" )
   print ( "\n" )
 
 
@@ -405,9 +407,6 @@ def parse_BEGIN_END_line ( log_line ) :
     "direction=outgoing"           : parse_direction_outgoing,
   }
 
-  if "2025-07-31 13:23:30.769566" in log_line :
-    print ( f"Here is the line! {log_line}" )
-
   for error, handler in error_handlers.items():
     if error in log_line:
       #print ( f"line handled by: {error}" )
@@ -424,8 +423,9 @@ def find_begin_end_lines ( sites ) :
     print ( f"site {site['name']} " )
   
     for router_log_file in site['router_log_files'] :
+      #count = 0
       #print ( f"router log  {router_log_file} " )
-      print ( f"router name: {router_log_file.split('/')[-3]}" )
+      print ( f"  router name: {router_log_file.split('/')[-3]}" )
       lines = get_matching_lines ( router_log_file, "BEGIN END" )
       #print ( f"    There are {len(lines)} lines" )
       for line in lines :
@@ -435,6 +435,11 @@ def find_begin_end_lines ( sites ) :
         else:
           event['router_pod_name'] = router_log_file.split('/')[-3]
           site ['events'].append ( event )
+          print ( f"found {event['type']}" )
+          #print ( f"find_begin_end_lines:  site {site['name']} now has {len(site['events'])} events" )
+          #count += 1
+      #print ( f"  there are {count} BEGIN END lines" )
+
 
 
     

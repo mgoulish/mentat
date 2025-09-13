@@ -18,18 +18,61 @@ def new_network ( root ) :
 
 
 def new_site ( root ) :
-  keys = [ 'name',
+  keys = [ 'events',
+           'name',
            'ingress-host',
            'root',
            'routers',
            'listeners',
            'connectors' ]
+  print ( f"new_site: making new site with root {root}" )
   site = dict.fromkeys ( keys, None )         
   site [ 'root' ]       = root
+  site [ 'events' ]     = []
   site [ 'routers' ]    = []
   site [ 'listeners' ]  = []
   site [ 'connectors' ] = []
   return site
+
+
+
+def get_dirs ( root ) :
+    return [
+        dir for dir in os.listdir ( root )
+        if os.path.isdir ( os.path.join (root, dir) )
+    ]
+
+
+
+def get_site_routers ( site_path ) :
+  site_subdirs = get_dirs ( site_path )
+  routers = []
+  if "pods" in site_subdirs :
+    pods_path = f"{site_path}/pods"
+    pods = get_dirs ( pods_path )
+    for pod in pods :
+      if pod.startswith ( "skupper-router" ) :
+        pod_path = f"{pods_path}/{pod}"
+        pod_yaml_file = f"{pod_path}/pod.yaml"
+        with open (pod_yaml_file, 'r') as file:
+          pod_yaml_data = yaml.safe_load ( file )
+          if 'metadata' in pod_yaml_data :
+            metadata = pod_yaml_data['metadata']
+            if 'annotations' in metadata :
+              annotations = metadata['annotations']
+              if 'k8s.v1.cni.cncf.io/network-status' in annotations:
+                network_status_str = annotations['k8s.v1.cni.cncf.io/network-status']
+                network_status = json.loads(network_status_str)
+                ip = next((item.get('ips', []) for item in network_status), [])
+                # TODO : make this a call to new_router()
+                print ( f"get_site_routers: making router with name {pod}" )
+                router = { "pod_name" : pod,
+                           "pod_path" : pod_path,
+                           "ip"       : ip }
+                routers.append ( router )
+  return routers
+
+
 
 
 
@@ -54,15 +97,10 @@ def read_skupper_site_yaml ( site, file_name ) :
     yaml_data = yaml.safe_load ( file )
     yaml_data_data = yaml_data['data']
 
-    #if 'name' in yaml_data_data :
-      #site['name'] = yaml_data_data['name']
-    #else :
-      #print ( "read_site error: name not found" )
-    
     if 'ingress-host' in yaml_data_data:
       site['ingress-host'] = yaml_data_data['ingress-host']
     else :
-      print ( "read_site error: ingress-host not found" )
+      print ( "read_skupper_site_yaml error: ingress-host not found" )
       
 
 
@@ -96,11 +134,14 @@ def read_skupper_internal_yaml ( site, file_name ) :
 
 
 
-def read_site ( network, dir_name ) :
-  site = new_site ( dir_name )
-  site['name'] = dir_name.split('/')[-1]
-  print ( f"\nread_site at {dir_name}" )
-  config_dir = dir_name + '/configmaps'
+def read_site ( network, path ) :
+  site = new_site ( path )
+
+  # Take the site name from the last element of the directory path,
+  # because it has the full name.
+  site['name'] = path.split('/')[-1]
+  print ( f"\nread_site at {path}" )
+  config_dir = path + '/configmaps'
 
   # skupper-site.yaml ----------------------------------------
   file_name = config_dir + '/skupper-site.yaml'
@@ -109,6 +150,9 @@ def read_site ( network, dir_name ) :
   # skupper-internal.yaml ----------------------------------------
   file_name = config_dir + '/skupper-internal.yaml'
   read_skupper_internal_yaml ( site, file_name )
+
+  print ( "read_site: getting site routers" )
+  site['routers'] = get_site_routers ( path )
 
   print ( "read_site: " )
   pprint.pprint ( site )
