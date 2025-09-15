@@ -19,6 +19,7 @@ def new_network ( root ) :
 
 def new_site ( root ) :
   keys = [ 'events',
+           'raw_events',
            'name',
            'ingress-host',
            'root',
@@ -28,6 +29,7 @@ def new_site ( root ) :
   print ( f"new_site: making new site with root {root}" )
   site = dict.fromkeys ( keys, None )         
   site [ 'root' ]       = root
+  site [ 'raw_events' ] = []
   site [ 'events' ]     = []
   site [ 'routers' ]    = []
   site [ 'listeners' ]  = []
