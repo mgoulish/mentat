@@ -1,0 +1,56 @@
+metadata:
+  creationTimestamp: "2025-05-14T16:50:52Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"85f36ae8-19b9-49fd-833d-02e53be0ab0e"}: {}
+      f:spec:
+        f:internalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":5671,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: site-controller
+    operation: Update
+    time: "2025-05-14T16:50:52Z"
+  name: skupper-router-local
+  namespace: silm-mongodb
+  ownerReferences:
+  - apiVersion: v1
+    kind: ConfigMap
+    name: skupper-site
+    uid: 85f36ae8-19b9-49fd-833d-02e53be0ab0e
+  resourceVersion: "8685037954"
+  uid: 08ac68a9-7b5c-4540-b2b4-8d5bb358dc02
+spec:
+  clusterIP: 254.52.221.140
+  clusterIPs:
+  - 254.52.221.140
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: amqps
+    port: 5671
+    protocol: TCP
+    targetPort: 5671
+  selector:
+    app.kubernetes.io/name: skupper-router
+    app.kubernetes.io/part-of: skupper
+    application: skupper-router
+    skupper.io/component: router
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

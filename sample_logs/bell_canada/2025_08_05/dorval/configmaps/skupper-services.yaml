@@ -1,0 +1,44 @@
+data:
+  prd-mc-rs-mdb-0-0-svc: '{"address":"prd-mc-rs-mdb-0-0-svc","protocol":"tcp","ports":[27017,27018],"exposeIngress":"","targets":[],"origin":"85f36ae8-19b9-49fd-833d-02e53be0ab0e"}'
+  prd-mc-rs-mdb-0-1-svc: '{"address":"prd-mc-rs-mdb-0-1-svc","protocol":"tcp","ports":[27017,27018],"exposeIngress":"","targets":[],"origin":"85f36ae8-19b9-49fd-833d-02e53be0ab0e"}'
+  prd-mc-rs-mdb-1-0-svc: '{"address":"prd-mc-rs-mdb-1-0-svc","protocol":"tcp","ports":[27017,27018],"exposeIngress":"","targets":[{"name":"prd-mc-rs-mdb-1-0.prd-mc-rs-mdb-1-svc","targetPorts":{"27017":27017,"27018":27018},"service":"prd-mc-rs-mdb-1-0.prd-mc-rs-mdb-1-svc"}]}'
+metadata:
+  creationTimestamp: "2025-05-14T16:50:21Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"30154dce-1695-472b-8dce-1f582c24acbf"}: {}
+    manager: site-controller
+    operation: Update
+    time: "2025-05-14T16:50:21Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:prd-mc-rs-mdb-0-0-svc: {}
+        f:prd-mc-rs-mdb-0-1-svc: {}
+    manager: service-controller
+    operation: Update
+    time: "2025-05-14T16:54:00Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        f:prd-mc-rs-mdb-1-0-svc: {}
+    manager: skupper.exe
+    operation: Update
+    time: "2025-05-14T16:54:17Z"
+  name: skupper-services
+  namespace: silm-mongodb
+  ownerReferences:
+  - apiVersion: v1
+    kind: ConfigMap
+    name: skupper-site
+    uid: 30154dce-1695-472b-8dce-1f582c24acbf
+  resourceVersion: "9292903258"
+  uid: 3e4646d4-276f-41a1-871d-5fffb3baf6db

@@ -1,0 +1,38 @@
+2025-08-01 13:07:14.273796+00:00 UTC
+skupper-prd-wyn-skupper-router-7f4bf489d5-d94wd
+
+Router Statistics
+  attr                             value
+  ==================================================================================
+  Version                          2.7.1-rh-1
+  Mode                             interior
+  Router Id                        skupper-prd-wyn-skupper-router-7f4bf489d5-d94wd
+  Worker Threads                   4
+  Uptime                           000:23:43:31
+  VmSize                           548 MiB
+  RSS                              78.2 MiB
+  Area                             0
+  Auto Links                       0
+  Links                            1430
+  Nodes                            3
+  Addresses                        246
+  Total Connections                372
+  Presettled Count                 1874
+  Dropped Presettled Count         0
+  Accepted Count                   31941
+  Rejected Count                   0
+  Released Count                   669
+  Modified Count                   33
+  Deliveries Delayed > 1sec        0
+  Deliveries Delayed > 10sec       0
+  Deliveries Stuck > 10sec         0
+  Links Blocked                    0
+  Ingress Count                    35116
+  Egress Count                     57945
+  Transit Count                    1542421
+  Deliveries from Route Container  0
+  Deliveries to Route Container    0
+  TCP Service Connections          361
+  AMQP Service Connections         5
+  HTTP1 Service Connections        0
+  HTTP2 Service Connections        0

@@ -1,0 +1,52 @@
+NAME                   COUNT                                                                   AGE
+DefinitionMonitorEvent 90                                                                      2h5m35s
+                       4     statefulset event for silm-mongodb/prd-mc-rs-mdb-0                2h5m35s
+                       4     service event for silm-mongodb/prd-mc-rs-mdb-0-1-svc              18h6m13s
+                       4     service event for silm-mongodb/prd-mc-rs-mdb-0-0-svc              18h6m13s
+                       14    deployment event for                                              18h6m32s
+                             silm-mongodb/mongodb-enterprise-operator                          
+                       7     deployment event for silm-mongodb/skupper-prometheus              22h42m15s
+IpMappingEvent         137                                                                     2h5m35s
+                       8     254.12.22.255 mapped to prd-mc-rs-mdb-0-1                         2h5m35s
+                       2     254.12.22.151 mapped to                                           18h6m32s
+                             mongodb-enterprise-operator-69dff8894c-kpnfv                      
+                       8      mapped to mongodb-enterprise-operator-69dff8894c-kpnfv           18h6m40s
+                       2     mapping for 254.14.10.85 deleted                                  22h42m14s
+                       6     254.14.10.85 mapped to skupper-prometheus-dfb746497-7w449         22h42m14s
+ServiceControllerEvent 20                                                                      18h6m13s
+                       4     service event for silm-mongodb/prd-mc-rs-mdb-0-1-svc              18h6m13s
+                       4     service event for silm-mongodb/prd-mc-rs-mdb-0-0-svc              18h6m13s
+                       1     service event for silm-mongodb/skupper-router-local               85h53m20s
+                       1     service event for silm-mongodb/skupper-router                     85h53m20s
+                       1     service event for silm-mongodb/skupper-prometheus                 85h53m20s
+ServiceSyncEvent       6                                                                       23h43m50s
+                       1     Error sending out updates: EOF                                    23h43m50s
+                       3     Error receiving updates: dial tcp 254.52.221.140:5671:            23h43m52s
+                             connect: connection refused                                       
+                       1     Error receiving updates: EOF                                      23h43m52s
+                       1     Service interface(s) added                                        85h53m20s
+                             prd-mc-rs-mdb-0-0-svc,prd-mc-rs-mdb-0-1-svc,prd-mc-rs-mdb-1-0-svc 
+SiteQueryError         4                                                                       23h43m52s
+                       1     Error handling requests: Error handling request for               23h43m52s
+                             85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query:          
+                             Failed reading request from                                       
+                             85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query:          
+                             read tcp 254.14.10.84:49120->254.52.221.140:5671: read:           
+                             connection reset by peer                                          
+                       1     Error handling requests: Could not open receiver for              23h44m25s
+                             85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query: EOF      
+                       1     Error handling requests: Error handling request for               23h44m25s
+                             85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query:          
+                             Failed reading request from                                       
+                             85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query: EOF      
+                       1     Failed to get site url: routes.route.openshift.io                 85h53m21s
+                             "skupper-inter-router" not found                                  
+HttpServerError        6                                                                       23h44m26s
+                       6     Error retrieving routers: Failed to receive response:             23h44m26s
+                             context deadline exceeded                                         
+GatewayQueryRequest    2                                                                       23h45m25s
+                       2     gateway request                                                   23h45m25s
+SiteQueryRequest       2                                                                       23h45m25s
+                       2     site data request                                                 23h45m25s
+PolicyController       1                                                                       85h53m19s
+                       1     Skupper policy is disabled                                        85h53m19s

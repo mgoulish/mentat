@@ -1,0 +1,69 @@
+metadata:
+  creationTimestamp: "2025-05-14T16:50:54Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"85f36ae8-19b9-49fd-833d-02e53be0ab0e"}: {}
+      f:spec:
+        f:externalTrafficPolicy: {}
+        f:internalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":8010,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":8080,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: site-controller
+    operation: Update
+    time: "2025-05-14T16:50:54Z"
+  name: skupper
+  namespace: silm-mongodb
+  ownerReferences:
+  - apiVersion: v1
+    kind: ConfigMap
+    name: skupper-site
+    uid: 85f36ae8-19b9-49fd-833d-02e53be0ab0e
+  resourceVersion: "8685038254"
+  uid: fba7581c-d915-42f4-a741-57f613bd66dc
+spec:
+  clusterIP: 254.52.228.203
+  clusterIPs:
+  - 254.52.228.203
+  externalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: metrics
+    nodePort: 31972
+    port: 8010
+    protocol: TCP
+    targetPort: 8010
+  - name: rest-api
+    nodePort: 30475
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: skupper-service-controller
+    app.kubernetes.io/part-of: skupper
+    skupper.io/component: service-controller
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}

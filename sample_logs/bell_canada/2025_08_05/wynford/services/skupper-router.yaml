@@ -1,0 +1,81 @@
+metadata:
+  creationTimestamp: "2025-05-14T16:50:52Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"85f36ae8-19b9-49fd-833d-02e53be0ab0e"}: {}
+      f:spec:
+        f:externalTrafficPolicy: {}
+        f:internalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":8081,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":45671,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+          k:{"port":55671,"protocol":"TCP"}:
+            .: {}
+            f:name: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: site-controller
+    operation: Update
+    time: "2025-05-14T16:50:52Z"
+  name: skupper-router
+  namespace: silm-mongodb
+  ownerReferences:
+  - apiVersion: v1
+    kind: ConfigMap
+    name: skupper-site
+    uid: 85f36ae8-19b9-49fd-833d-02e53be0ab0e
+  resourceVersion: "8685037982"
+  uid: 8356c9ef-8030-4692-aa50-fa1aca72310f
+spec:
+  clusterIP: 254.52.239.77
+  clusterIPs:
+  - 254.52.239.77
+  externalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: inter-router
+    nodePort: 30411
+    port: 55671
+    protocol: TCP
+    targetPort: 55671
+  - name: edge
+    nodePort: 32353
+    port: 45671
+    protocol: TCP
+    targetPort: 45671
+  - name: claims
+    nodePort: 30224
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app.kubernetes.io/name: skupper-router
+    app.kubernetes.io/part-of: skupper
+    application: skupper-router
+    skupper.io/component: router
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}

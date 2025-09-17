@@ -1,0 +1,107 @@
+2025/07/31 13:23:22 FLOW_LOG: 
+{
+  "recType":"FLOW",
+  "identity":"47skj:8924449",
+  "parent":"47skj:7",
+  "startTime":1753787882092663,
+  "endTime":0,
+  "source":"47skj:0.flows",
+  "sourceHost":"254.16.22.57",
+  "sourcePort":"46286",
+  "counterFlow":"w4lmh:3065964",
+  "trace":"0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh|0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8",
+  "latency":1843,
+  "octets":388900,
+  "octetsUnacked":20815,
+  "windowSize":1459620,
+  "process":"7f1fcd89-ac2a-44fd-a1ae-c4393b844c52",
+  "processName":"site-servers-30154dce",
+  "protocol":"tcp",
+  "place":2
+}
+
+
+
+2025/07/31 13:24:07 FLOW_LOG: 
+{
+  "recType":"FLOW",
+  "identity":"w4lmh:3065964",
+  "parent":"w4lmh:4",
+  "startTime":1753772484519405,
+  "endTime":1753968136929103,
+  "source":"w4lmh:0.flows",
+  "sourceHost":"254.14.7.238",
+  "sourcePort":"33012",
+  "counterFlow":"47skj:8924449",
+  "latency":15397580572,
+  "octets":215500,
+  "octetsUnacked":215500,
+  "windowSize":1459620,
+  "reason":"destination unreachable",
+  "result":"delivery-failed",
+  "process":"d89cfdf5-1138-460a-8e11-d1240cd45ee8",
+  "processName":"site-clients-85f36ae8",
+  "protocol":"tcp",
+  "place":1
+}
+
+
+2025/07/31 13:24:07 FLOW_LOG: 
+{
+  "recType":"FLOWPAIR",
+  "identity":"fp-w4lmh:3065964",
+  "startTime":1753772484519405,
+  "endTime":1753968136929103,
+  "duration":195652409698,
+  "protocol":"tcp",
+  "sourceSiteId":"85f36ae8-19b9-49fd-833d-02e53be0ab0e",
+  "sourceSiteName":"skupper-prd-wyn",
+  "destinationSiteId":"30154dce-1695-472b-8dce-1f582c24acbf",
+  "destinationSiteName":"skupper-prd-dor",
+  "flowTrace":"skupper-prd-wyn-skupper-router-78979fc89c-w4lmh@skupper-prd-wyn|skupper-prd-wyn-skupper-router-78979fc89c-jfhn8@skupper-prd-wyn|skupper-prd-dor-skupper-router-7bdcbdc855-47skj@skupper-prd-dor",
+  "forwardFlow":
+  {
+    "recType":"FLOW",
+    "identity":"w4lmh:3065964",
+    "parent":"w4lmh:4",
+    "startTime":1753772484519405,
+    "endTime":1753968136929103,
+    "source":"w4lmh:0.flows",
+    "sourceHost":"254.14.7.238",
+    "sourcePort":"33012",
+    "counterFlow":"47skj:8924449",
+    "latency":15397580572,
+    "octets":215500,
+    "octetsUnacked":215500,
+    "windowSize":1459620,
+    "reason":"destination unreachable",
+    "result":"delivery-failed",
+    "process":"d89cfdf5-1138-460a-8e11-d1240cd45ee8",
+    "processName":"site-clients-85f36ae8",
+    "protocol":"tcp",
+    "place":1
+  },
+  "counterFlow":{"recType":"FLOW",
+  "identity":"47skj:8924449",
+  "parent":"47skj:7",
+  "startTime":1753787882092663,
+  "endTime":0,
+  "source":"47skj:0.flows",
+  "sourceHost":"254.16.22.57",
+  "sourcePort":"46286",
+  "counterFlow":"w4lmh:3065964",
+  "trace":"0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh|0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8",
+  "latency":1843,
+  "octets":388900,
+  "octetsUnacked":20815,
+  "windowSize":1459620,
+  "process":"7f1fcd89-ac2a-44fd-a1ae-c4393b844c52",
+  "processName":"site-servers-30154dce",
+  "protocol":"tcp",
+  "place":2},
+  "siteAggregateId":"85f36ae8-19b9-49fd-833d-02e53be0ab0e-to-30154dce-1695-472b-8dce-1f582c24acbf",
+  "processGroupAggregateId":"441f3e9f-d43c-4272-a323-1990c6a73ef1-to-7ed5983a-393a-435e-a212-73581f33f597",
+  "processAggregateId":"d89cfdf5-1138-460a-8e11-d1240cd45ee8-to-7f1fcd89-ac2a-44fd-a1ae-c4393b844c52"
+}
+
+

@@ -1,0 +1,299 @@
+2025/07/31 13:14:45 Skupper service controller
+2025/07/31 13:14:45 Version: 1.8.1-rh-1
+2025/07/31 13:14:45 Setting up event handlers
+2025/07/31 13:14:45 Waiting for Skupper router component to start
+2025/07/31 13:14:46 Starting the Skupper controller
+2025/07/31 13:14:46 Waiting for informer caches to sync
+2025/07/31 13:14:46 Starting workers
+W0731 13:14:46.327057       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 13:14:46.337599       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+2025/07/31 13:14:46 COLLECTOR: Connection for sender mc/sfe.30154dce-1695-472b-8dce-1f582c24acbf.heartbeats to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+2025/07/31 13:14:46 COLLECTOR: Connection for receiver sfe.30154dce-1695-472b-8dce-1f582c24acbf to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+2025/07/31 13:14:46 COLLECTOR: Connection for sender mc/sfe.30154dce-1695-472b-8dce-1f582c24acbf to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+2025/07/31 13:14:46 COLLECTOR: Connection for sender mc/sfe.all to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+2025/07/31 13:14:47 Console server listening on :8080
+2025/07/31 13:14:47 Started workers
+2025/07/31 13:14:47 Skupper policy is disabled
+Interior nodes are [map[address:amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w cost:<nil> id:skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w identity:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w index:0 instance:1749943919 lastTopoChange:1753859506 linkState:[skupper-prd-dor-skupper-router-7bdcbdc855-47skj skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w nextHop:(self) protocolVersion:1 routerLink:<nil> type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 cost:1 id:skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 identity:router.node/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 index:2 instance:1747241473 lastTopoChange:<nil> linkState:[skupper-prd-wyn-skupper-router-78979fc89c-w4lmh skupper-prd-dor-skupper-router-7bdcbdc855-47skj skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w] name:router.node/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 nextHop:<nil> protocolVersion:1 routerLink:1 type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj cost:1 id:skupper-prd-dor-skupper-router-7bdcbdc855-47skj identity:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-47skj index:1 instance:1749946219 lastTopoChange:<nil> linkState:[skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-47skj nextHop:<nil> protocolVersion:1 routerLink:0 type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh cost:2 id:skupper-prd-wyn-skupper-router-78979fc89c-w4lmh identity:router.node/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh index:3 instance:1751506407 lastTopoChange:<nil> linkState:[skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh nextHop:skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 protocolVersion:1 routerLink:<nil> type:io.skupper.router.router.node validOrigins:[]]]
+BatchQuery([{io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.router [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+Interior nodes are [map[address:amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w cost:<nil> id:skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w identity:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w index:0 instance:1749943919 lastTopoChange:1753859506 linkState:[skupper-prd-dor-skupper-router-7bdcbdc855-47skj skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w nextHop:(self) protocolVersion:1 routerLink:<nil> type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 cost:1 id:skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 identity:router.node/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 index:2 instance:1747241473 lastTopoChange:<nil> linkState:[skupper-prd-wyn-skupper-router-78979fc89c-w4lmh skupper-prd-dor-skupper-router-7bdcbdc855-47skj skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w] name:router.node/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 nextHop:<nil> protocolVersion:1 routerLink:1 type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj cost:1 id:skupper-prd-dor-skupper-router-7bdcbdc855-47skj identity:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-47skj index:1 instance:1749946219 lastTopoChange:<nil> linkState:[skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-47skj nextHop:<nil> protocolVersion:1 routerLink:0 type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh cost:2 id:skupper-prd-wyn-skupper-router-78979fc89c-w4lmh identity:router.node/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh index:3 instance:1751506407 lastTopoChange:<nil> linkState:[skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh nextHop:skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 protocolVersion:1 routerLink:<nil> type:io.skupper.router.router.node validOrigins:[]]]
+BatchQuery([{io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.router [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.httpRequestInfo [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.httpRequestInfo [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management}])
+Waiting for response 1 of 2
+Waiting for response 2 of 2
+BatchQuery([{io.skupper.router.tcpConnection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.tcpConnection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management}])
+Waiting for response 1 of 2
+Waiting for response 2 of 2
+BatchQuery([])
+Interior nodes are [map[address:amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w cost:<nil> id:skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w identity:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w index:0 instance:1749943919 lastTopoChange:1753859506 linkState:[skupper-prd-dor-skupper-router-7bdcbdc855-47skj skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w nextHop:(self) protocolVersion:1 routerLink:<nil> type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 cost:1 id:skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 identity:router.node/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 index:2 instance:1747241473 lastTopoChange:<nil> linkState:[skupper-prd-wyn-skupper-router-78979fc89c-w4lmh skupper-prd-dor-skupper-router-7bdcbdc855-47skj skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w] name:router.node/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 nextHop:<nil> protocolVersion:1 routerLink:1 type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj cost:1 id:skupper-prd-dor-skupper-router-7bdcbdc855-47skj identity:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-47skj index:1 instance:1749946219 lastTopoChange:<nil> linkState:[skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-47skj nextHop:<nil> protocolVersion:1 routerLink:0 type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh cost:2 id:skupper-prd-wyn-skupper-router-78979fc89c-w4lmh identity:router.node/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh index:3 instance:1751506407 lastTopoChange:<nil> linkState:[skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh nextHop:skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 protocolVersion:1 routerLink:<nil> type:io.skupper.router.router.node validOrigins:[]]]
+BatchQuery([{io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.router [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+Interior nodes are [map[address:amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w cost:<nil> id:skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w identity:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w index:0 instance:1749943919 lastTopoChange:1753859506 linkState:[skupper-prd-dor-skupper-router-7bdcbdc855-47skj skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w nextHop:(self) protocolVersion:1 routerLink:<nil> type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 cost:1 id:skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 identity:router.node/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 index:2 instance:1747241473 lastTopoChange:<nil> linkState:[skupper-prd-wyn-skupper-router-78979fc89c-w4lmh skupper-prd-dor-skupper-router-7bdcbdc855-47skj skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w] name:router.node/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 nextHop:<nil> protocolVersion:1 routerLink:1 type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj cost:1 id:skupper-prd-dor-skupper-router-7bdcbdc855-47skj identity:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-47skj index:1 instance:1749946219 lastTopoChange:<nil> linkState:[skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-dor-skupper-router-7bdcbdc855-47skj nextHop:<nil> protocolVersion:1 routerLink:0 type:io.skupper.router.router.node validOrigins:[]] map[address:amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh cost:2 id:skupper-prd-wyn-skupper-router-78979fc89c-w4lmh identity:router.node/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh index:3 instance:1751506407 lastTopoChange:<nil> linkState:[skupper-prd-wyn-skupper-router-78979fc89c-jfhn8] name:router.node/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh nextHop:skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 protocolVersion:1 routerLink:<nil> type:io.skupper.router.router.node validOrigins:[]]]
+BatchQuery([{io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.router [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.router [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-jfhn8/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management} {io.skupper.router.connection [] amqp:/_topo/0/skupper-prd-wyn-skupper-router-78979fc89c-w4lmh/$management}])
+Waiting for response 1 of 4
+Waiting for response 2 of 4
+Waiting for response 3 of 4
+Waiting for response 4 of 4
+BatchQuery([{io.skupper.router.httpRequestInfo [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.httpRequestInfo [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management}])
+Waiting for response 1 of 2
+Waiting for response 2 of 2
+BatchQuery([{io.skupper.router.tcpConnection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-9wz2w/$management} {io.skupper.router.tcpConnection [] amqp:/_topo/0/skupper-prd-dor-skupper-router-7bdcbdc855-47skj/$management}])
+Waiting for response 1 of 2
+Waiting for response 2 of 2
+BatchQuery([])
+W0731 13:22:09.344257       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+2025/07/31 13:22:18 COLLECTOR: Error sending out updates EOF
+2025/07/31 13:22:18 COLLECTOR: Connection for sender mc/sfe.30154dce-1695-472b-8dce-1f582c24acbf.heartbeats to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+2025/07/31 13:22:40 COLLECTOR: Error sending out updates EOF
+2025/07/31 13:22:40 COLLECTOR: Error sending out updates dial tcp 254.53.39.20:5671: connect: connection refused
+2025/07/31 13:22:40 COLLECTOR: Error sending out updates dial tcp 254.53.39.20:5671: connect: connection refused
+2025/07/31 13:22:40 COLLECTOR: Receiver sfe.30154dce-1695-472b-8dce-1f582c24acbf EOF
+2025/07/31 13:22:40 COLLECTOR: Receiver sfe.30154dce-1695-472b-8dce-1f582c24acbf dial tcp 254.53.39.20:5671: connect: connection refused
+2025/07/31 13:22:40 COLLECTOR: Error sending out updates EOF
+2025/07/31 13:22:40 COLLECTOR: Connection for receiver sfe.30154dce-1695-472b-8dce-1f582c24acbf to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+2025/07/31 13:22:40 COLLECTOR: Connection for sender mc/sfe.30154dce-1695-472b-8dce-1f582c24acbf to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+2025/07/31 13:22:40 COLLECTOR: Connection for sender mc/sfe.30154dce-1695-472b-8dce-1f582c24acbf.heartbeats to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+2025/07/31 13:22:46 COLLECTOR: Error sending out updates EOF
+2025/07/31 13:22:46 COLLECTOR: Connection for sender mc/sfe.all to amqps://skupper-router-local.silm-mongodb.svc.cluster.local:5671 established
+W0731 13:28:45.352335       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 13:36:37.359907       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 13:44:42.375010       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 13:51:10.382641       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 13:58:29.391156       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:05:21.398433       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:14:49.405970       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:23:02.414829       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:28:07.422836       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:33:36.431496       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:39:23.438144       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:46:05.444921       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:51:41.452498       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 14:58:17.460292       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 15:05:59.467303       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 15:11:01.474507       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 15:16:12.481123       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 15:25:59.489895       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 15:32:13.499893       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 15:38:37.510420       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 15:46:18.519143       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 15:54:35.531603       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:00:01.539589       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:07:54.555509       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:13:34.562991       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:21:46.570691       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:27:58.578901       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:35:46.587720       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:43:43.595147       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:50:27.602312       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 16:58:01.610901       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 17:04:14.618793       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 17:13:17.625497       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 17:22:59.632657       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 17:29:27.647948       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 17:34:34.655234       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 17:41:58.669758       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 17:50:36.677388       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 17:56:36.686558       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 18:04:58.695132       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 18:13:59.702849       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 18:22:51.711647       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 18:29:50.723855       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 18:36:31.733483       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 18:44:42.741637       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 18:54:14.749149       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 19:03:46.756743       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 19:13:31.764188       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 19:20:41.772146       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 19:29:18.782055       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 19:38:29.790638       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 19:44:49.798110       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 19:51:46.806628       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 19:57:51.813294       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 20:06:09.820166       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 20:14:55.826818       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 20:23:44.834005       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 20:31:21.842536       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 20:36:45.849829       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 20:46:24.857244       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 20:55:21.865000       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 21:05:10.873351       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 21:10:30.882809       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 21:18:45.892178       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 21:25:03.899201       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 21:31:16.906059       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 21:38:25.912823       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 21:45:58.919878       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 21:55:23.928729       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 22:03:58.935256       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 22:12:34.943550       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 22:18:00.965962       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 22:23:00.973997       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 22:32:01.982900       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 22:39:41.989866       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 22:45:08.997540       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 22:52:20.006683       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 23:00:45.013768       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 23:10:20.021401       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 23:20:15.029406       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 23:29:11.036841       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 23:37:52.044651       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 23:45:49.052121       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 23:52:55.058797       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0731 23:59:31.067037       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 00:07:19.074787       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 00:16:01.083215       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 00:25:53.090410       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 00:33:03.097400       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 00:42:28.106767       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 00:51:47.115343       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 00:57:54.123460       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 01:03:42.131362       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 01:10:12.139229       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 01:20:03.146321       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 01:29:13.153729       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 01:35:12.161596       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 01:43:09.169068       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 01:49:30.176839       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 01:58:30.183799       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 02:03:55.194917       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 02:09:22.202892       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 02:15:14.210877       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 02:24:23.221464       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 02:30:39.227835       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 02:37:29.236274       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 02:44:18.244420       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 02:54:14.251889       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:00:23.260384       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:06:03.267473       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:15:23.274149       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:23:43.282828       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:30:18.290351       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:39:06.297767       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:46:09.306402       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:51:54.313548       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 03:57:29.319003       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 04:07:05.325659       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 04:12:57.332590       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 04:20:31.339194       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 04:26:31.346941       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 04:35:42.355509       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 04:44:12.363929       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 04:51:56.369850       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 04:59:31.376793       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 05:05:08.384151       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 05:12:53.392445       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 05:22:46.399791       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 05:28:41.408664       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 05:38:20.416761       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 05:44:57.424471       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 05:52:20.432380       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 05:58:07.440528       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 06:05:06.451024       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 06:13:52.458440       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 06:21:58.466124       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 06:31:45.472264       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 06:37:53.480419       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 06:44:13.489412       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 06:51:53.496335       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 06:59:38.502314       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 07:09:36.510010       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 07:19:17.519534       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 07:25:40.527513       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 07:31:21.535258       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 07:39:22.542496       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 07:47:18.550050       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 07:57:00.558777       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 08:05:08.586689       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 08:11:11.593502       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 08:16:25.602052       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 08:23:31.614244       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 08:31:30.620645       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 08:40:51.626902       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 08:45:59.638716       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 08:53:34.648181       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:01:18.654542       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:09:38.664369       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:18:22.671225       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:24:29.678227       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:32:16.686791       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:37:41.694163       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:42:48.702052       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:48:10.709470       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 09:54:13.718012       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 10:03:12.727015       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 10:10:32.735220       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 10:19:55.742146       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 10:27:56.748795       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 10:36:22.755967       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 10:45:47.764014       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 10:53:08.770161       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:00:44.779767       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:08:09.787523       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:17:04.795999       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:22:23.802280       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:29:57.811014       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:35:56.821352       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:44:15.831588       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:52:11.836130       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 11:59:26.843960       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 12:06:02.851373       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 12:11:02.860980       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 12:16:14.870258       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 12:22:15.878642       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 12:30:07.886055       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 12:37:54.894018       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 12:45:38.900256       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 12:53:48.906683       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 13:01:55.913888       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+W0801 13:08:21.921471       1 warnings.go:70] apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+

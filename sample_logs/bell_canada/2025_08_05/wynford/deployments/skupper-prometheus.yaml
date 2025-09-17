@@ -1,0 +1,208 @@
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "2"
+  creationTimestamp: "2025-05-14T16:50:55Z"
+  generation: 2
+  labels:
+    app.kubernetes.io/name: skupper-prometheus
+    app.kubernetes.io/part-of: skupper
+    skupper.io/component: prometheus
+  managedFields:
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/name: {}
+          f:app.kubernetes.io/part-of: {}
+          f:skupper.io/component: {}
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"85f36ae8-19b9-49fd-833d-02e53be0ab0e"}: {}
+      f:spec:
+        f:progressDeadlineSeconds: {}
+        f:replicas: {}
+        f:revisionHistoryLimit: {}
+        f:selector: {}
+        f:strategy:
+          f:rollingUpdate:
+            .: {}
+            f:maxSurge: {}
+            f:maxUnavailable: {}
+          f:type: {}
+        f:template:
+          f:metadata:
+            f:labels:
+              .: {}
+              f:app.kubernetes.io/name: {}
+              f:app.kubernetes.io/part-of: {}
+              f:skupper.io/component: {}
+          f:spec:
+            f:containers:
+              k:{"name":"prometheus-server"}:
+                .: {}
+                f:args: {}
+                f:image: {}
+                f:imagePullPolicy: {}
+                f:name: {}
+                f:resources: {}
+                f:terminationMessagePath: {}
+                f:terminationMessagePolicy: {}
+                f:volumeMounts:
+                  .: {}
+                  k:{"mountPath":"/etc/prometheus"}:
+                    .: {}
+                    f:mountPath: {}
+                    f:name: {}
+                  k:{"mountPath":"/prometheus"}:
+                    .: {}
+                    f:mountPath: {}
+                    f:name: {}
+            f:dnsPolicy: {}
+            f:restartPolicy: {}
+            f:schedulerName: {}
+            f:securityContext: {}
+            f:serviceAccount: {}
+            f:serviceAccountName: {}
+            f:terminationGracePeriodSeconds: {}
+            f:volumes:
+              .: {}
+              k:{"name":"prometheus-config"}:
+                .: {}
+                f:configMap:
+                  .: {}
+                  f:defaultMode: {}
+                  f:name: {}
+                f:name: {}
+              k:{"name":"prometheus-storage-volume"}:
+                .: {}
+                f:emptyDir: {}
+                f:name: {}
+    manager: site-controller
+    operation: Update
+    time: "2025-05-14T16:50:55Z"
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:template:
+          f:spec:
+            f:containers:
+              k:{"name":"prometheus-server"}:
+                f:resources:
+                  f:limits:
+                    .: {}
+                    f:cpu: {}
+                    f:memory: {}
+                  f:requests:
+                    .: {}
+                    f:cpu: {}
+                    f:memory: {}
+    manager: Mozilla
+    operation: Update
+    time: "2025-07-31T14:24:49Z"
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:deployment.kubernetes.io/revision: {}
+      f:status:
+        f:availableReplicas: {}
+        f:conditions:
+          k:{"type":"Progressing"}:
+            f:lastUpdateTime: {}
+            f:message: {}
+            f:reason: {}
+        f:observedGeneration: {}
+        f:readyReplicas: {}
+        f:replicas: {}
+        f:updatedReplicas: {}
+    manager: kube-controller-manager
+    operation: Update
+    time: "2025-07-31T14:25:08Z"
+  name: skupper-prometheus
+  namespace: silm-mongodb
+  ownerReferences:
+  - apiVersion: v1
+    kind: ConfigMap
+    name: skupper-site
+    uid: 85f36ae8-19b9-49fd-833d-02e53be0ab0e
+  resourceVersion: "9799924218"
+  uid: 831e6229-4c91-4272-9cee-f7bf3dbb6017
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      skupper.io/component: prometheus
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/name: skupper-prometheus
+        app.kubernetes.io/part-of: skupper
+        skupper.io/component: prometheus
+    spec:
+      containers:
+      - args:
+        - --config.file=/etc/prometheus/prometheus.yml
+        - --storage.tsdb.path=/prometheus/
+        - --web.config.file=/etc/prometheus/web-config.yml
+        image: registry.redhat.io/openshift4/ose-prometheus@sha256:baf5189676a5dc386e41c1e2a0455db4ec3394b47a411cb604c3fa1933e270a5
+        imagePullPolicy: Always
+        name: prometheus-server
+        resources:
+          limits:
+            cpu: 100m
+            memory: 500Mi
+          requests:
+            cpu: 10m
+            memory: 128Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/prometheus
+          name: prometheus-config
+        - mountPath: /prometheus
+          name: prometheus-storage-volume
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: skupper-prometheus
+      serviceAccountName: skupper-prometheus
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: prometheus-server-config
+        name: prometheus-config
+      - emptyDir: {}
+        name: prometheus-storage-volume
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2025-07-15T17:13:25Z"
+    lastUpdateTime: "2025-07-15T17:13:25Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2025-05-14T16:50:55Z"
+    lastUpdateTime: "2025-07-31T14:25:08Z"
+    message: ReplicaSet "skupper-prometheus-7696ccbd84" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 2
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

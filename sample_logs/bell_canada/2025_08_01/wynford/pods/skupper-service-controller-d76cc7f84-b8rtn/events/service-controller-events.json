@@ -1,0 +1,200 @@
+[
+    {
+        "name": "DefinitionMonitorEvent",
+        "total": 90,
+        "counts": [
+            {
+                "message": "statefulset event for silm-mongodb/prd-mc-rs-mdb-0",
+                "count": 4,
+                "last_occurrence": "2025-08-01T11:01:47.480489825Z"
+            },
+            {
+                "message": "service event for silm-mongodb/prd-mc-rs-mdb-0-1-svc",
+                "count": 4,
+                "last_occurrence": "2025-07-31T19:01:10.142379988Z"
+            },
+            {
+                "message": "service event for silm-mongodb/prd-mc-rs-mdb-0-0-svc",
+                "count": 4,
+                "last_occurrence": "2025-07-31T19:01:09.912700736Z"
+            },
+            {
+                "message": "deployment event for silm-mongodb/mongodb-enterprise-operator",
+                "count": 14,
+                "last_occurrence": "2025-07-31T19:00:51.021364783Z"
+            },
+            {
+                "message": "deployment event for silm-mongodb/skupper-prometheus",
+                "count": 7,
+                "last_occurrence": "2025-07-31T14:25:08.089171305Z"
+            }
+        ],
+        "last_occurrence": "2025-08-01T11:01:47.480489825Z"
+    },
+    {
+        "name": "IpMappingEvent",
+        "total": 137,
+        "counts": [
+            {
+                "message": "254.12.22.255 mapped to prd-mc-rs-mdb-0-1",
+                "count": 8,
+                "last_occurrence": "2025-08-01T11:01:47.469213318Z"
+            },
+            {
+                "message": "254.12.22.151 mapped to mongodb-enterprise-operator-69dff8894c-kpnfv",
+                "count": 2,
+                "last_occurrence": "2025-07-31T19:00:50.979891981Z"
+            },
+            {
+                "message": " mapped to mongodb-enterprise-operator-69dff8894c-kpnfv",
+                "count": 8,
+                "last_occurrence": "2025-07-31T19:00:43.279921821Z"
+            },
+            {
+                "message": "mapping for 254.14.10.85 deleted",
+                "count": 2,
+                "last_occurrence": "2025-07-31T14:25:08.912861095Z"
+            },
+            {
+                "message": "254.14.10.85 mapped to skupper-prometheus-dfb746497-7w449",
+                "count": 6,
+                "last_occurrence": "2025-07-31T14:25:08.911239244Z"
+            }
+        ],
+        "last_occurrence": "2025-08-01T11:01:47.469213318Z"
+    },
+    {
+        "name": "ServiceControllerEvent",
+        "total": 20,
+        "counts": [
+            {
+                "message": "service event for silm-mongodb/prd-mc-rs-mdb-0-1-svc",
+                "count": 4,
+                "last_occurrence": "2025-07-31T19:01:10.142574807Z"
+            },
+            {
+                "message": "service event for silm-mongodb/prd-mc-rs-mdb-0-0-svc",
+                "count": 4,
+                "last_occurrence": "2025-07-31T19:01:09.912720418Z"
+            },
+            {
+                "message": "service event for silm-mongodb/skupper-router-local",
+                "count": 1,
+                "last_occurrence": "2025-07-28T23:14:03.295172322Z"
+            },
+            {
+                "message": "service event for silm-mongodb/skupper-router",
+                "count": 1,
+                "last_occurrence": "2025-07-28T23:14:03.295171069Z"
+            },
+            {
+                "message": "service event for silm-mongodb/skupper-prometheus",
+                "count": 1,
+                "last_occurrence": "2025-07-28T23:14:03.29516569Z"
+            }
+        ],
+        "last_occurrence": "2025-07-31T19:01:10.142574807Z"
+    },
+    {
+        "name": "ServiceSyncEvent",
+        "total": 6,
+        "counts": [
+            {
+                "message": "Error sending out updates: EOF",
+                "count": 1,
+                "last_occurrence": "2025-07-31T13:23:33.231584942Z"
+            },
+            {
+                "message": "Error receiving updates: dial tcp 254.52.221.140:5671: connect: connection refused",
+                "count": 3,
+                "last_occurrence": "2025-07-31T13:23:30.708074541Z"
+            },
+            {
+                "message": "Error receiving updates: EOF",
+                "count": 1,
+                "last_occurrence": "2025-07-31T13:23:30.701621183Z"
+            },
+            {
+                "message": "Service interface(s) added prd-mc-rs-mdb-0-0-svc,prd-mc-rs-mdb-0-1-svc,prd-mc-rs-mdb-1-0-svc",
+                "count": 1,
+                "last_occurrence": "2025-07-28T23:14:03.230934466Z"
+            }
+        ],
+        "last_occurrence": "2025-07-31T13:23:33.231584942Z"
+    },
+    {
+        "name": "SiteQueryError",
+        "total": 4,
+        "counts": [
+            {
+                "message": "Error handling requests: Error handling request for 85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query: Failed reading request from 85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query: read tcp 254.14.10.84:49120-\u003e254.52.221.140:5671: read: connection reset by peer",
+                "count": 1,
+                "last_occurrence": "2025-07-31T13:23:30.636557684Z"
+            },
+            {
+                "message": "Error handling requests: Could not open receiver for 85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query: EOF",
+                "count": 1,
+                "last_occurrence": "2025-07-31T13:22:58.247816688Z"
+            },
+            {
+                "message": "Error handling requests: Error handling request for 85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query: Failed reading request from 85f36ae8-19b9-49fd-833d-02e53be0ab0e/skupper-site-query: EOF",
+                "count": 1,
+                "last_occurrence": "2025-07-31T13:22:58.247793202Z"
+            },
+            {
+                "message": "Failed to get site url: routes.route.openshift.io \"skupper-inter-router\" not found",
+                "count": 1,
+                "last_occurrence": "2025-07-28T23:14:02.067637304Z"
+            }
+        ],
+        "last_occurrence": "2025-07-31T13:23:30.636557684Z"
+    },
+    {
+        "name": "HttpServerError",
+        "total": 6,
+        "counts": [
+            {
+                "message": "Error retrieving routers: Failed to receive response: context deadline exceeded",
+                "count": 6,
+                "last_occurrence": "2025-07-31T13:22:57.425383297Z"
+            }
+        ],
+        "last_occurrence": "2025-07-31T13:22:57.425383297Z"
+    },
+    {
+        "name": "GatewayQueryRequest",
+        "total": 2,
+        "counts": [
+            {
+                "message": "gateway request",
+                "count": 2,
+                "last_occurrence": "2025-07-31T13:21:58.059752884Z"
+            }
+        ],
+        "last_occurrence": "2025-07-31T13:21:58.059752884Z"
+    },
+    {
+        "name": "SiteQueryRequest",
+        "total": 2,
+        "counts": [
+            {
+                "message": "site data request",
+                "count": 2,
+                "last_occurrence": "2025-07-31T13:21:57.650447491Z"
+            }
+        ],
+        "last_occurrence": "2025-07-31T13:21:57.650447491Z"
+    },
+    {
+        "name": "PolicyController",
+        "total": 1,
+        "counts": [
+            {
+                "message": "Skupper policy is disabled",
+                "count": 1,
+                "last_occurrence": "2025-07-28T23:14:04.435339956Z"
+            }
+        ],
+        "last_occurrence": "2025-07-28T23:14:04.435339956Z"
+    }
+]

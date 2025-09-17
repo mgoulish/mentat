@@ -1,0 +1,3 @@
+2025-08-05 18:23:00.564997+00:00 UTC
+skupper-prd-wyn-skupper-router-7f4bf489d5-d94wd
+

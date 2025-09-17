@@ -1,0 +1,27 @@
+metadata:
+  annotations:
+    control-plane.alpha.kubernetes.io/leader: '{"holderIdentity":"skupper-router-7f4bf489d5-lmzhp","leaseDurationSeconds":15,"acquireTime":"2025-07-31T13:23:47Z","renewTime":"2025-08-01T13:07:29Z","leaderTransitions":1}'
+  creationTimestamp: "2025-05-14T16:51:16Z"
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:control-plane.alpha.kubernetes.io/leader: {}
+        f:ownerReferences:
+          .: {}
+          k:{"uid":"61b3857f-38d6-49cb-85f7-01d840d28bef"}: {}
+    manager: config-sync
+    operation: Update
+    time: "2025-08-01T13:07:29Z"
+  name: skupper-site-leader
+  namespace: silm-mongodb
+  ownerReferences:
+  - apiVersion: apps/v1
+    kind: Deployment
+    name: skupper-router
+    uid: 61b3857f-38d6-49cb-85f7-01d840d28bef
+  resourceVersion: "9752722470"
+  uid: 4e866187-564b-4ced-b03f-8ebd6bdfffa8
