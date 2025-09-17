@@ -26,7 +26,6 @@ def new_site ( root ) :
            'routers',
            'listeners',
            'connectors' ]
-  print ( f"new_site: making new site with root {root}" )
   site = dict.fromkeys ( keys, None )         
   site [ 'root' ]       = root
   site [ 'raw_events' ] = []
@@ -67,7 +66,6 @@ def get_site_routers ( site_path ) :
                 network_status = json.loads(network_status_str)
                 ip = next((item.get('ips', []) for item in network_status), [])
                 # TODO : make this a call to new_router()
-                print ( f"get_site_routers: making router with name {pod}" )
                 router = { "pod_name" : pod,
                            "pod_path" : pod_path,
                            "ip"       : ip }
@@ -107,7 +105,6 @@ def read_skupper_site_yaml ( site, file_name ) :
 
 
 def read_skupper_internal_yaml ( site, file_name ) :
-  print ( f"reading file {file_name}" )
   with open (file_name, 'r') as file:
     yaml_data = yaml.safe_load ( file )
     yaml_data_data = yaml_data['data']
@@ -123,16 +120,11 @@ def read_skupper_internal_yaml ( site, file_name ) :
             listener_data = router_json_data[i][1]
             listener.update ( { k: listener_data[k] for k in ['name', 'port', 'role'] if k in listener_data } )
             site['listeners'].append(listener)
-            #print ( f"listener: {listener}" )
           case 'connector' :
             connector = new_connector()
             connector_data = router_json_data[i][1]
             connector.update ( { k: connector_data[k] for k in ['host', 'name', 'port', 'role'] if k in connector_data } )
             site['connectors'].append(connector)
-            #print ( f"connector: {connector}" )
-
-          #case _:
-            #print ( f"something else {router_json_data[i]}" )
 
 
 
@@ -142,7 +134,6 @@ def read_site ( network, path ) :
   # Take the site name from the last element of the directory path,
   # because it has the full name.
   site['name'] = path.split('/')[-1]
-  print ( f"\nread_site at {path}" )
   config_dir = path + '/configmaps'
 
   # skupper-site.yaml ----------------------------------------
@@ -153,12 +144,7 @@ def read_site ( network, path ) :
   file_name = config_dir + '/skupper-internal.yaml'
   read_skupper_internal_yaml ( site, file_name )
 
-  print ( "read_site: getting site routers" )
   site['routers'] = get_site_routers ( path )
-
-  print ( "read_site: " )
-  pprint.pprint ( site )
-
   network['sites'].append(site)
 
       
@@ -167,7 +153,6 @@ def read_site ( network, path ) :
 
 def read_network ( network ) :
   root = network['root']
-  print ( f"Reading config at root {root}" )
   for dir in os.listdir ( root ) :
     site_path = os.path.join (root, dir)
     if os.path.isdir ( site_path ) :

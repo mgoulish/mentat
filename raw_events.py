@@ -33,12 +33,17 @@ def string_to_microseconds_since_epoch ( s ):
 
 
 def get_matching_lines ( file_name, word ) :
-    matching_lines = []
-    with open ( file_name, 'r') as file:
-      for line in file:
-        if word in line:
-          matching_lines.append ( line )
-    return matching_lines
+  
+  print ( f"gml: file: {file_name} word: {word}" )
+  matching_lines = []
+  with open ( file_name, 'r') as file:
+    count = 1
+    for line in file:
+      if word in line:
+        matching_lines.append ( line )
+        print ( f"  {count}" )
+      count += 1
+  return matching_lines
 
 
 
@@ -59,9 +64,6 @@ def new_raw_event ( ) :
   return event
 
 
-# TODO change all these hostnames to just strings.
-# TODO put else clauses on all parsing match paragraphs
-
 # example:
 #2025-08-01 13:07:22.267199 +0000 SERVER (info) [C65149] Accepted connection to localhost:5672 from 127.0.0.1:51274
 def parse_connection_accepted_line (log_line):
@@ -78,8 +80,6 @@ def parse_connection_accepted_line (log_line):
     event['to']            = match.group(4)
     event['from']          = match.group(5)
 
-    #print ( f"match: connection accepted: |{log_line}|" )
-    #pprint.pprint ( event )
     return event
   else :
     print ( f"connection accepted match failed on line: {log_line}" )
@@ -101,17 +101,11 @@ def find_router_connections_accepted ( root_path, sites ) :
       print ( f"read log for {router_pod_name} ")
       router_log_file = f"{root_path}/{site_name}/pods/{router_pod_name}/logs/router-logs.txt"
       site['router_log_files'].append ( router_log_file )
-      #print ( f"log file: {router_log_file}" )
       accepted_lines = get_matching_lines ( router_log_file, "Accepted" )
-      print ( f"  there are {len(accepted_lines)} connection accepted lines." )
       for line in accepted_lines :
-        #print ( line )
         event = parse_connection_accepted_line ( line )
         event['router_pod_name'] = router_pod_name
-        #connection_accepted_dicts.append ( parsed_line )
         site ['raw_events'].append ( event )
-        #print ( f"found {event['type']}" )
-  print ( "\n" )
 
 
 
@@ -135,8 +129,6 @@ def parse_unknown_protocol ( log_line ) :
     event['from']          = match.group(6)
     event['to']            = match.group(7)
     event['epoch_micros']  = string_to_microseconds_since_epoch ( f"{match.group(1)} {match.group(2)}" )
-    #print ( f"match: unknown protocol: |{log_line}|" )
-    #pprint.pprint ( event )
   else :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
@@ -167,8 +159,6 @@ def parse_no_route_to_host ( log_line ) :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
   
-  #print ( f"match: no route to host   |{log_line}|" )
-  #pprint.pprint ( event )
   return event
 
 
@@ -192,8 +182,6 @@ def parse_connection_timed_out ( log_line ) :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
-  #print ( f"\nmatch: connection timed out |{log_line}|" )
-  #pprint.pprint ( event )
   return event
 
 
@@ -202,7 +190,6 @@ def parse_connection_timed_out ( log_line ) :
 def parse_connection_reset_by_peer ( log_line ) :
   # example :
   # 2025-07-31 13:23:31.033934 +0000 FLOW_LOG (info) LOG [lmzhp:297] BEGIN END parent=lmzhp:0 logSeverity=3 logText=LOG_SERVER: [C8] Connection to 254.14.10.83:55671 failed: proton:io Connection reset by peer - disconnected 254.14.10.83:55671 (SSL Failure: error:0A000126:SSL routines::unexpected eof while reading) sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
-  # print ( f"match: Connection reset by peer |{log_line}|" )
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'connection_reset_by_peer'
@@ -220,9 +207,6 @@ def parse_connection_reset_by_peer ( log_line ) :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
-  #print ( f"\nmatch: connection timed out |{log_line}|" )
-  #pprint.pprint ( event )
-
   return event
 
 
@@ -232,7 +216,6 @@ def parse_unexpected_eof ( log_line ) :
   # example :
   # 2025-07-31 13:22:58.374561 +0000 FLOW_LOG (info) LOG [lmzhp:20] BEGIN END parent=lmzhp:0 logSeverity=3 logText=LOG_SERVER: [C7] Connection to 254.14.21.121:55671 failed: amqp:connection:framing-error SSL Failure: error:0A000126:SSL routines::unexpected eof while reading sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
   # 2025-07-31 13:22:58.404151 +0000 FLOW_LOG (info) LOG [dv879:480] BEGIN END parent=dv879:0 logSeverity=3 logText=LOG_SERVER: [C13] Connection to skupper-silm-mongodb.legacy.ocp-prd-wyn.bell.corp.bce.ca:30411 failed: amqp:connection:framing-error SSL Failure: error:0A000126:SSL routines::unexpected eof while reading sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
-  #print ( f"unexpected eof |{log_line}|" )
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'unexpected_eof'
@@ -247,8 +230,6 @@ def parse_unexpected_eof ( log_line ) :
     event['parent']        = match.group(4)
     event['connection_id'] = match.group(5)
     event['to']            = match.group(6)
-    #print ( f"\nmatch: unexpected eof |{log_line}|" )
-    #pprint.pprint ( event )
   else :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
@@ -261,7 +242,6 @@ def parse_unexpected_eof ( log_line ) :
 def parse_configuration_failed ( log_line ) :
   # example :
   # 2025-07-31 13:22:08.033962 +0000 FLOW_LOG (info) LOG [dv879:13] BEGIN END parent=dv879:0 logSeverity=3 logText=LOG_SERVER: SSL CA configuration failed for connection [C11] to skupper-silm-mongodb.legacy.ocp-prd-wyn.bell.corp.bce.ca:30411 sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1277
-  #print ( f"configuration failed |{log_line}|" )
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'configuration_failed'
@@ -278,9 +258,6 @@ def parse_configuration_failed ( log_line ) :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
-  #print ( f"\nmatch: configuration failed |{log_line}|" )
-  #pprint.pprint ( event )
-
   return event
 
 
@@ -289,7 +266,6 @@ def parse_configuration_failed ( log_line ) :
 def parse_no_protocol_header_found ( log_line ) :
   # example :
   # 2025-07-31 13:22:08.033996 +0000 FLOW_LOG (info) LOG [dv879:16] BEGIN END parent=dv879:0 logSeverity=3 logText=LOG_SERVER: [C11] Connection to skupper-silm-mongodb.legacy.ocp-prd-wyn.bell.corp.bce.ca:30411 failed: amqp:connection:framing-error Expected AMQP protocol header: no protocol header found (connection aborted) sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
-  #print ( f"no protocol header found |{log_line}|" )
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'no_protocol_header'
@@ -307,9 +283,6 @@ def parse_no_protocol_header_found ( log_line ) :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
-  #print ( f"\nmatch: no protocol header |{log_line}|" )
-  #pprint.pprint ( event )
-
   return event
 
 
@@ -318,7 +291,6 @@ def parse_no_protocol_header_found ( log_line ) :
 def parse_no_cert ( log_line ) :
   # example :
   # 2025-07-31 20:05:51.844516 +0000 FLOW_LOG (info) LOG [lmzhp:2286] BEGIN END parent=lmzhp:0 logSeverity=3 logText=LOG_SERVER: [C20023] Connection from 254.12.22.1:36680 (to :45671) failed: amqp:connection:framing-error SSL Failure: error:0A0000C7:SSL routines::peer did not return a certificate sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1107
-  #print ( f"no cert |{log_line}|" )
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'no_cert'
@@ -337,9 +309,6 @@ def parse_no_cert ( log_line ) :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
-  #print ( f"\nmatch: no cert |{log_line}|" )
-  #pprint.pprint ( event )
-
   return event
 
 
@@ -348,7 +317,6 @@ def parse_no_cert ( log_line ) :
 def parse_setup_error ( log_line ) :
   # example :
   # 2025-07-31 13:22:08.033985 +0000 FLOW_LOG (info) LOG [dv879:15] BEGIN END parent=dv879:0 logSeverity=3 logText=LOG_SERVER: [C11] Connection aborted due to internal setup error sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=766
-  #print ( f"setup error |{log_line}|" )
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'setup_error'
@@ -365,9 +333,6 @@ def parse_setup_error ( log_line ) :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
-  #print ( f"\nmatch: internal setup error |{log_line}|" )
-  #pprint.pprint ( event )
-
   return event
 
 
@@ -376,7 +341,6 @@ def parse_setup_error ( log_line ) :
 def parse_direction_outgoing ( log_line ) :
   # example :
   # 2025-07-31 13:23:31.032207 +0000 FLOW_LOG (info) LINK [lmzhp:11] BEGIN END parent=lmzhp:0 mode=interior name=skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 linkCost=1 direction=outgoing
-  #print ( f"direction outgoing |{log_line}|" )
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'direction_outgoing'
@@ -393,17 +357,11 @@ def parse_direction_outgoing ( log_line ) :
     print ( f"{event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
-  #print ( f"\nmatch: direction outgoing |{log_line}|" )
-  #pprint.pprint ( event )
-  #print ( event )
-
   return event
 
 
 
 def parse_BEGIN_END_line ( log_line ) :
-
-  #print ( f"pre-match: line: {log_line}" )
 
   error_handlers = {
     "Unknown protocol"             : parse_unknown_protocol,

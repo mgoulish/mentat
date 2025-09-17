@@ -31,16 +31,12 @@ raw_events.find_begin_end_lines ( network['sites'] )
 #pprint.pprint ( network )
 
 print ( "\nmain: make connections:\n" )
-conn.make_connections ( network )
-
-for site in network['sites'] :
-  print ( f"main: site: {site['name']}" )
-  for event in site['events'] :
-    id = event['id']
-    print ( f"looking for: {id} -------------------------" )
-    for raw_event in site['raw_events'] :
-      line = raw_event['line']
-      if id in line :
-        print ( raw_event['line'] )
+conn.make_connections        ( network )
+conn.find_connection_origins ( network )
 
 
+#print ( "main: connections:" )
+#for site in network['sites'] :
+  #print ( f"\n\n\n  site: {site['name']} ---------------------------------------" )
+  #pprint.pprint ( site )
+  #print ( "end site ---------------------------------------------------------------" )
