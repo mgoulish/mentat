@@ -31,16 +31,16 @@ def usec_to_duration ( microseconds ) :
 # returns host pod name and site name
 def ip_to_router ( site, host ) :
   if host == 'localhost' :
-    print ( "ip_to_router: Localhost --> None, None ") 
+    #print ( "ip_to_router: Localhost --> None, None ") 
     return None, None
 
   for router in site['routers'] :
     ip_list = router['ip']
     for ip in ip_list :
       if ip == host :
-        print ( f"ip_to_router: found: {router['pod_name']} {site['name']}  ")
+        #print ( f"ip_to_router: found: {router['pod_name']} {site['name']}  ")
         return router['pod_name'], site['name']
-  print ( "ip_to_router: default --> None, None ")
+  #print ( "ip_to_router: default --> None, None ")
   return None, None
 
 
@@ -72,16 +72,16 @@ def new_connection ( raw_event ) :
            'duration_usec',
            'duration_hms',
            'type', 
-           'disconnect_event' ]   # This is the raw event that caused the disconnect
+           'disconnect_event',  # This is the raw event that caused the disconnect
+           'lines' ]            # file lines that contributed to this event
   cnx = dict.fromkeys ( keys, None )
   cnx['type']      = raw_event['type']
   cnx['id']        = raw_event['connection_id']
-  #cnx['from_host'] = raw_event['from'].split(':')[0]
-  #cnx['from_port'] = raw_event['from'].split(':')[1]
   cnx['to_router'] = raw_event['router_pod_name']
   cnx['to_port']   = raw_event['to']
   cnx['micros']    = raw_event['epoch_micros']
   cnx['timestamp'] = microseconds_to_timestamp ( cnx['micros'] )
+  cnx['lines']     = []
 
   # Check for loopback form of 'from' address
   pattern = r'^::1:(\d{1,5})$'
@@ -117,6 +117,7 @@ def make_connections ( network ) :
     for re in site['raw_events'] :
       if re['type'] == 'connection_accepted' :
         cnx = new_connection ( re )
+        cnx['lines'].extend ( re['lines'] )
         # Now for each connection accepted, go through 
         # all the raw events in this site looking for 
         # events with the same connection id, looking 

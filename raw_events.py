@@ -26,34 +26,13 @@ string     = r'(\S+)'
  
 
 
-def string_to_microseconds_since_epoch ( s ):
-    dt = datetime.strptime(s, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc)
-    return int(dt.timestamp() * 1_000_000)
-
-
-
-def get_matching_lines ( file_name, word ) :
-  
-  print ( f"gml: file: {file_name} word: {word}" )
-  matching_lines = []
-  with open ( file_name, 'r') as file:
-    count = 1
-    for line in file:
-      if word in line:
-        matching_lines.append ( line )
-        print ( f"  {count}" )
-      count += 1
-  return matching_lines
-
-
-
 def new_raw_event ( ) :
   keys = [ 'connection_id',
            'epoch_micros',
            'type', 
            'from',
            'id',
-           'line',
+           'lines',
            'message',
            'name',
            'parent',
@@ -61,7 +40,43 @@ def new_raw_event ( ) :
            'timestamp',
            'to' ]
   event = dict.fromkeys ( keys, None )
+  event['lines'] = []
   return event
+
+
+
+def new_line ( ) :
+  keys = [ 'content',
+           'file_name',
+           'line_number' ]
+  line = dict.fromkeys ( keys, None )
+  return line
+
+
+
+def string_to_microseconds_since_epoch ( s ):
+    dt = datetime.strptime(s, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc)
+    return int(dt.timestamp() * 1_000_000)
+
+
+
+def get_matching_lines ( file_name, word ) :
+  #print ( f"gml: file: {file_name} word: {word}" )
+  matching_lines = []
+  with open ( file_name, 'r') as file:
+    count = 1
+    for file_line in file:
+      if word in file_line:
+        line = new_line()
+        line['content']     = file_line
+        line['file_name']   = file_name
+        line['line_number'] = count
+        matching_lines.append ( line )
+        #print ( f"  {count}" )
+      count += 1
+  return matching_lines
+
+
 
 
 # example:
@@ -103,8 +118,9 @@ def find_router_connections_accepted ( root_path, sites ) :
       site['router_log_files'].append ( router_log_file )
       accepted_lines = get_matching_lines ( router_log_file, "Accepted" )
       for line in accepted_lines :
-        event = parse_connection_accepted_line ( line )
+        event = parse_connection_accepted_line ( line['content'] )
         event['router_pod_name'] = router_pod_name
+        event['lines'].append ( line )
         site ['raw_events'].append ( event )
 
 
@@ -395,7 +411,7 @@ def find_begin_end_lines ( sites ) :
       print ( f"  router name: {router_log_file.split('/')[-3]}" )
       lines = get_matching_lines ( router_log_file, "BEGIN END" )
       for line in lines :
-        raw_event = parse_BEGIN_END_line ( line )
+        raw_event = parse_BEGIN_END_line ( line['content'] )
         if raw_event == None :
           print ( f"bad line: {line}" )
         else:
