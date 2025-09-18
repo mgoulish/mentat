@@ -75,7 +75,7 @@ def new_connection ( raw_event ) :
            'disconnect_event',  # This is the raw event that caused the disconnect
            'lines' ]            # file lines that contributed to this event
   cnx = dict.fromkeys ( keys, None )
-  cnx['type']      = raw_event['type']
+  cnx['type']      = 'connection'
   cnx['id']        = raw_event['connection_id']
   cnx['to_router'] = raw_event['router_pod_name']
   cnx['to_port']   = raw_event['to']
@@ -116,6 +116,10 @@ def make_connections ( network ) :
     cnx_count = 0
     for re in site['raw_events'] :
       if re['type'] == 'connection_accepted' :
+        # This is the 'cooked' event that will
+        # include one or more raw events, like
+        # the connection-accepted event and the 
+        # disconnect event.
         cnx = new_connection ( re )
         cnx['lines'].extend ( re['lines'] )
         # Now for each connection accepted, go through 
@@ -133,6 +137,7 @@ def make_connections ( network ) :
             cnx['disconnect_event'] = re_2
             cnx['duration_usec'] = re_2['epoch_micros'] - cnx['micros']
             cnx["duration_hms"]= usec_to_duration ( cnx['duration_usec'] )
+            cnx['lines'].extend ( re_2['lines'] )
 
         # In my training data, there was never more than 1
         # event with the same connection ID, after the initial
@@ -150,8 +155,8 @@ def find_connection_origins ( network ) :
     for event in site['events'] :
       if event['type'] == 'connection_accepted' :
         event['from_host_name'], event['site_name'] = ip_to_router ( site, event['from_host'] ) 
-        if event['from_host_name'] != None and event['site_name'] != None :
-          pprint.pprint ( event )
+        #if event['from_host_name'] != None and event['site_name'] != None :
+          #pprint.pprint ( event )
 
 
 

@@ -35,8 +35,9 @@ conn.make_connections        ( network )
 conn.find_connection_origins ( network )
 
 
-#print ( "main: connections:" )
-#for site in network['sites'] :
-  #print ( f"\n\n\n  site: {site['name']} ---------------------------------------" )
-  #pprint.pprint ( site )
-  #print ( "end site ---------------------------------------------------------------" )
+print ( "main: connections:" )
+for site in network['sites'] :
+  print ( f"\n\n\n  events for site: {site['name']} ---------------------------------------" )
+  for event in site['events'] :
+    pprint.pprint ( event )
+  print ( "end site events---------------------------------------------------------------" )

@@ -46,7 +46,8 @@ def new_raw_event ( ) :
 
 
 def new_line ( ) :
-  keys = [ 'content',
+  keys = [ 'type',
+           'content',
            'file_name',
            'line_number' ]
   line = dict.fromkeys ( keys, None )
@@ -60,7 +61,7 @@ def string_to_microseconds_since_epoch ( s ):
 
 
 
-def get_matching_lines ( file_name, word ) :
+def get_matching_lines ( file_name, word, line_type ) :
   #print ( f"gml: file: {file_name} word: {word}" )
   matching_lines = []
   with open ( file_name, 'r') as file:
@@ -68,6 +69,7 @@ def get_matching_lines ( file_name, word ) :
     for file_line in file:
       if word in file_line:
         line = new_line()
+        line['type']        = line_type
         line['content']     = file_line
         line['file_name']   = file_name
         line['line_number'] = count
@@ -81,9 +83,9 @@ def get_matching_lines ( file_name, word ) :
 
 # example:
 #2025-08-01 13:07:22.267199 +0000 SERVER (info) [C65149] Accepted connection to localhost:5672 from 127.0.0.1:51274
-def parse_connection_accepted_line (log_line):
+def parse_connection_accepted_line ( log_line ):
   event = new_raw_event ( )
-  event['line'] = log_line
+  # event['line'] = log_line   delete
   #pattern = date_time + skip + brackets + "Accepted connection " + port_only + " from " + endpoint
   pattern = date_time + skip + brackets + skip + "Accepted connection to " + string + " from " + string
   match   = re.match(pattern, log_line)
@@ -116,11 +118,13 @@ def find_router_connections_accepted ( root_path, sites ) :
       print ( f"read log for {router_pod_name} ")
       router_log_file = f"{root_path}/{site_name}/pods/{router_pod_name}/logs/router-logs.txt"
       site['router_log_files'].append ( router_log_file )
-      accepted_lines = get_matching_lines ( router_log_file, "Accepted" )
+      accepted_lines = get_matching_lines ( router_log_file, "Accepted", 'connection' )
       for line in accepted_lines :
         event = parse_connection_accepted_line ( line['content'] )
         event['router_pod_name'] = router_pod_name
-        event['lines'].append ( line )
+        # Store the connection-accepted line-structure to make it
+        # easy to check this event by hand.
+        event['lines'].append ( line )  
         site ['raw_events'].append ( event )
 
 
@@ -409,13 +413,16 @@ def find_begin_end_lines ( sites ) :
   
     for router_log_file in site['router_log_files'] :
       print ( f"  router name: {router_log_file.split('/')[-3]}" )
-      lines = get_matching_lines ( router_log_file, "BEGIN END" )
+      lines = get_matching_lines ( router_log_file, "BEGIN END", 'disconnection' )
       for line in lines :
         raw_event = parse_BEGIN_END_line ( line['content'] )
         if raw_event == None :
           print ( f"bad line: {line}" )
         else:
           raw_event['router_pod_name'] = router_log_file.split('/')[-3]
+          # Store the BEGIN-END line-structure to make it
+          # easy to check this event by hand.
+          raw_event['lines'].append ( line )  
           site ['raw_events'].append ( raw_event )
           #print ( f"found {raw_event['type']}" )
 
