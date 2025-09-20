@@ -29,19 +29,35 @@ def usec_to_duration ( microseconds ) :
 
 
 # returns host pod name and site name
-def ip_to_router ( site, host ) :
-  if host == 'localhost' :
-    #print ( "ip_to_router: Localhost --> None, None ") 
-    return None, None
+def ip_to_router ( network, from_host ) :
+  #print ( f"ip_to_router looking for from_host {from_host}" )
+  if from_host == 'localhost' :
+    #print ( "ip_to_router fail can't do localhost")
+    return None
 
-  for router in site['routers'] :
-    ip_list = router['ip']
-    for ip in ip_list :
-      if ip == host :
-        #print ( f"ip_to_router: found: {router['pod_name']} {site['name']}  ")
-        return router['pod_name'], site['name']
-  #print ( "ip_to_router: default --> None, None ")
-  return None, None
+  for site in network['sites'] :
+    #print ( f"ip_to_router checking site {site['name']}" )
+    for router in site['routers'] :
+      #print ( f"ip_to_router: checking router {router['pod_name']}" )
+      #print ( f"   here is the whole router:  {router} " )
+      ip_list = router['ip']
+      #print ( f"from_host router has ips: {ip_list}" )
+      for ip in ip_list :
+        #print ( f"ip_to_router: checking ip {ip} against from_host {from_host}" )
+        if ip == from_host :
+          #print ( f"ip_to_router success: {from_host} --> {router['pod_name']} " )
+          return router['pod_name']
+        #else:
+          #print ( "nope" )
+
+  #print ( f"ip_to_router: fail finding {from_host} " )
+  return None
+
+
+
+# TODO make this do something
+def find_port_mode ( site, port ) :
+  return 'normal'
 
 
 
@@ -70,7 +86,8 @@ def new_connection ( raw_event ) :
            'timestamp',
            'micros',
            'duration_usec',
-           'duration_hms',
+           'duration_hms',      # That stands for "Hours Minutes Seconds"
+           'connection_type',
            'type', 
            'disconnect_event',  # This is the raw event that caused the disconnect
            'lines' ]            # file lines that contributed to this event
@@ -148,15 +165,59 @@ def make_connections ( network ) :
 
 
 
+
 def find_connection_origins ( network ) :
   print ( "\n\nfind_connection_origins *******************************************\n" )
+  fail_count  = 0
+  total_count = 0
   for site in network['sites'] :
-    print ( f"  site: {site['name']}" )
+    #print ( f"  site: {site['name']}" )
     for event in site['events'] :
-      if event['type'] == 'connection_accepted' :
-        event['from_host_name'], event['site_name'] = ip_to_router ( site, event['from_host'] ) 
-        #if event['from_host_name'] != None and event['site_name'] != None :
-          #pprint.pprint ( event )
+      if event['type'] == 'connection' :
+        #print ( "\n\n\n")
+        #pprint.pprint(event)  # TEMP
+        total_count += 1
+
+        # If the connection came from localhost check
+        # the mode of the port it came in on.
+        # that will serve as a confirmation that it is a client 
+        # connection.
+        if event['to_port'].startswith("localhost") :
+          event['from_host_name'] = 'localhost'
+          port = event['to_port'].split(':')[1]
+          #print ( f"   port == {port}" )
+          if port == None :
+            #print ( f"find_connection_origins error: can't get port from {event['to_port']}" )
+            sys.exit(1)
+          mode = find_port_mode ( site, port )
+          if mode == None :
+            #print ( f"find_connection_origins error: can't get mode from {site['name']} {port}" )
+            sys.exit(1)
+          #print ( f"mode == {mode}" )
+          if mode == 'normal' :
+            #print ( "MATCH localhost" )
+            event['connection_type'] = 'client'
+          else :
+            print ( f"find_connection_origins: case 1 FAILURE" )
+            fail_count += 1
+            #pprint.pprint ( event )
+
+        else :
+          # 254.18.23.2
+          pattern = r'^\d+\.\d+\.\d+\.\d+$'
+          match = re.match ( pattern, event['from_host'] )
+          if match :
+            #print ( f"MATCH  from host:  254.18.23.2  from port: {event['from_port']}" )
+            event['from_host_name']  = 'TEMP'
+            event['connection_type'] = 'TEMP'
+            router_name = ip_to_router ( network, event['from_host'] )
+            #print ( f"     ip_to_router returns {router_name}")
+          else :
+            fail_count += 1
+            #pprint.pprint ( event )
+
+
+  print ( f"\n\nfind_connection_origins failed on {fail_count} out of {total_count} events\n\n" )
 
 
 
