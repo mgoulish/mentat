@@ -55,9 +55,13 @@ def ip_to_router ( network, from_host ) :
 
 
 
-# TODO make this do something
-def find_port_mode ( site, port ) :
-  return 'normal'
+# A connection came in on this port, and we want to find the 
+# mode of the port so we can tell what kind of connection this is.
+def find_port_role ( site, port ) : 
+  for listener in site['listeners'] :
+    if str(listener['port']) == str(port) :
+      return listener['role']
+  return None
 
 
 
@@ -146,15 +150,10 @@ def make_connections ( network ) :
         #count = 0
         for re_2 in site['raw_events'] :
           if re_2['type'] != 'connection_accepted' and re_2['connection_id'] == re['connection_id']  :
-            # In my training data, these were the reasons for all the disconnects:
-            # 24 no_cert
-            # 1 no_route_to_host
-            # 24 unknown_protocol
-            #count += 1
             cnx['disconnect_event'] = re_2
-            cnx['duration_usec'] = re_2['epoch_micros'] - cnx['micros']
-            cnx["duration_hms"]= usec_to_duration ( cnx['duration_usec'] )
-            cnx['lines'].extend ( re_2['lines'] )
+            cnx['duration_usec']    = re_2['epoch_micros'] - cnx['micros']
+            cnx["duration_hms"]     = usec_to_duration ( cnx['duration_usec'] )
+            cnx['lines'].extend(re_2['lines'])
 
         # In my training data, there was never more than 1
         # event with the same connection ID, after the initial
@@ -189,12 +188,11 @@ def find_connection_origins ( network ) :
           if port == None :
             #print ( f"find_connection_origins error: can't get port from {event['to_port']}" )
             sys.exit(1)
-          mode = find_port_mode ( site, port )
-          if mode == None :
-            #print ( f"find_connection_origins error: can't get mode from {site['name']} {port}" )
+          role = find_port_role ( site, port )
+          if role == None :
+            print ( f"find_connection_origins error: can't get role from {site['name']} {port}" )
             sys.exit(1)
-          #print ( f"mode == {mode}" )
-          if mode == 'normal' :
+          if role == 'normal' :
             #print ( "MATCH localhost" )
             event['connection_type'] = 'client'
           else :

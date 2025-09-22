@@ -35,13 +35,15 @@ conn.make_connections        ( network )
 conn.find_connection_origins ( network )
 
 
+#sys.exit(0)   # TEMP
 
-#print ( "main: routers:" )
+print ( "\n\nmain: events:\n" )
 
-#for site in network['sites'] :
-  #print ( f"\n\n\n  listeners for site: {site['name']} ---------------------------------------" )
-  #for listener in site['listeners'] :
-    #pprint.pprint ( listener )
-  #print ( "end site listeners ---------------------------------------------------------------\n\n\n" )
+for site in network['sites'] :
+  print ( f"\n\n\n  events for site: {site['name']} ---------------------------------------" )
+  for event in site['events'] :
+    print ( "\n" )
+    pprint.pprint ( event )
+  print ( "\n\nend site events ---------------------------------------------------------------\n\n\n" )
 
 
