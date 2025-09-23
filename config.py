@@ -24,6 +24,7 @@ def new_site ( root ) :
            'ingress-host',
            'root',
            'routers',
+           'service_controller',
            'listeners',
            'connectors' ]
   site = dict.fromkeys ( keys, None )         
@@ -34,6 +35,22 @@ def new_site ( root ) :
   site [ 'listeners' ]  = []
   site [ 'connectors' ] = []
   return site
+
+
+
+def new_router ( ) :
+  keys = [ "pod_name",
+           "pod_path",
+           "ip" ]
+  return dict.fromkeys ( keys, None )
+
+
+
+def new_service_controller ( ) :
+  keys = [ "name",
+           "pod_path",
+           "pod_ip" ]
+  return dict.fromkeys ( keys, None )
 
 
 
@@ -65,14 +82,38 @@ def get_site_routers ( site_path ) :
                 network_status_str = annotations['k8s.v1.cni.cncf.io/network-status']
                 network_status = json.loads(network_status_str)
                 ip = next((item.get('ips', []) for item in network_status), [])
-                # TODO : make this a call to new_router()
-                router = { "pod_name" : pod,
-                           "pod_path" : pod_path,
-                           "ip"       : ip }
+                router = new_router()
+                router['pod_name'] = pod
+                router['pod_path'] = pod_path
+                router['ip']       = ip
                 routers.append ( router )
   return routers
 
 
+
+def get_service_controller ( site_path, site_name ) :
+  service_controller = new_service_controller()
+  print ( f"get_site_service_controller for path {site_path}" )
+  site_subdirs = get_dirs ( site_path )
+  if "pods" in site_subdirs :
+    pods_path = f"{site_path}/pods"
+    print ( f"pods path: {pods_path}" )
+    for sc_path in get_dirs(pods_path) :
+      print ( f"{sc_path}" )
+      if sc_path.startswith('skupper-service-controller') :
+        pod_yaml_path = f"{pods_path}/{sc_path}/pod.yaml"
+        print ( f"HERE: {pod_yaml_path}" )
+        with open (pod_yaml_path, 'r') as file:
+          pod_yaml_data = yaml.safe_load ( file )
+          print ( "Got the data!" )
+          if 'status' in pod_yaml_data :
+            status_data = pod_yaml_data['status']
+            if 'podIP' in status_data :
+              service_controller['pod_ip']   = status_data['podIP']
+              service_controller['pod_path'] = pod_yaml_path
+              service_controller['name']     = f"{sc_path} {site_name}"
+
+  return service_controller
 
 
 
@@ -144,7 +185,11 @@ def read_site ( network, path ) :
   file_name = config_dir + '/skupper-internal.yaml'
   read_skupper_internal_yaml ( site, file_name )
 
-  site['routers'] = get_site_routers ( path )
+  site['routers']            = get_site_routers ( path )
+  site['service_controller'] = get_service_controller ( path, site['name'] )
+
+  #print ( f"GOT SERVICE CONTROLLER {site['service_controller']}" )
+
   network['sites'].append(site)
 
       

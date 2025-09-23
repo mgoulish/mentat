@@ -49,6 +49,13 @@ def ip_to_router ( network, from_host ) :
           return router['pod_name']
         #else:
           #print ( "nope" )
+    # This site's router didn't match -- try the service controller.
+    print ( f"no match yet for {from_host}. but heres this sites service controller:" )
+    print ( site['service_controller'] )
+    print ( site['service_controller']['name'] )
+    if site['service_controller']['pod_ip'] == from_host :
+      print ( "THAT's A MATCH" )
+      return site['service_controller']['name']
 
   #print ( f"ip_to_router: fail finding {from_host} " )
   return None
@@ -170,11 +177,8 @@ def find_connection_origins ( network ) :
   fail_count  = 0
   total_count = 0
   for site in network['sites'] :
-    #print ( f"  site: {site['name']}" )
     for event in site['events'] :
       if event['type'] == 'connection' :
-        #print ( "\n\n\n")
-        #pprint.pprint(event)  # TEMP
         total_count += 1
 
         # If the connection came from localhost check
@@ -184,36 +188,34 @@ def find_connection_origins ( network ) :
         if event['to_port'].startswith("localhost") :
           event['from_host_name'] = 'localhost'
           port = event['to_port'].split(':')[1]
-          #print ( f"   port == {port}" )
           if port == None :
-            #print ( f"find_connection_origins error: can't get port from {event['to_port']}" )
+            print ( f"find_connection_origins error: can't get port from {event['to_port']}" )
             sys.exit(1)
           role = find_port_role ( site, port )
           if role == None :
             print ( f"find_connection_origins error: can't get role from {site['name']} {port}" )
             sys.exit(1)
           if role == 'normal' :
-            #print ( "MATCH localhost" )
             event['connection_type'] = 'client'
           else :
             print ( f"find_connection_origins: case 1 FAILURE" )
             fail_count += 1
-            #pprint.pprint ( event )
 
         else :
-          # 254.18.23.2
+          # for example: 254.18.23.2
           pattern = r'^\d+\.\d+\.\d+\.\d+$'
           match = re.match ( pattern, event['from_host'] )
           if match :
-            #print ( f"MATCH  from host:  254.18.23.2  from port: {event['from_port']}" )
-            event['from_host_name']  = 'TEMP'
+            # HERE
+            event['from_host_name']  = ip_to_router ( network, event['from_host'] )
+            print ( f"ip_to_router returned {event['from_host_name'] }" )
+            if event['from_host_name'] == None :
+              print ( "\nCan't get hostname on this one: " )
+              pprint.pprint(event)
             event['connection_type'] = 'TEMP'
-            router_name = ip_to_router ( network, event['from_host'] )
-            #print ( f"     ip_to_router returns {router_name}")
           else :
             fail_count += 1
-            #pprint.pprint ( event )
-
+ 
 
   print ( f"\n\nfind_connection_origins failed on {fail_count} out of {total_count} events\n\n" )
 
