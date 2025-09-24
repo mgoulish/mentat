@@ -7,6 +7,26 @@ import re
 
 
 
+def new_skstat_file ( ) :
+  keys = [ 'path',
+           'lines',
+           'pod_name',
+           'site_name' ]
+  skstat_file = dict.fromkeys ( keys, None )
+  skstat_file['lines'] = []
+  return skstat_file
+
+
+
+def new_skstat_line ( ) :
+  keys = [ 'role',
+           'host',
+           'port' ]
+  skstat_line = dict.fromkeys ( keys, None )
+  return skstat_line
+
+
+
 def microseconds_to_timestamp ( microseconds ) :
     seconds = microseconds / 1_000_000
     dt = datetime.fromtimestamp(seconds, tz=timezone.utc)
@@ -42,7 +62,18 @@ def ip_to_router ( network, from_host ) :
     # This site's router didn't match -- try the service controller.
     if site['service_controller']['pod_ip'] == from_host :
       return site['service_controller']['name']
+  return None
 
+
+
+def ip_to_router_from_skstat ( network, from_host ) :
+  print ( "ip_to_router_from_skstat" )
+  for skstat in network['skstats'] :
+    print ( f"site {skstat['site_name']} pod {skstat['pod_name']}" ) 
+    for line in skstat['lines'] : 
+      if line['host'] == from_host :
+        print ( "match !" )
+        return skstat['pod_name']
   return None
 
 
@@ -54,24 +85,6 @@ def find_port_role ( site, port ) :
     if str(listener['port']) == str(port) :
       return listener['role']
   return None
-
-
-
-def new_skstat_file ( ) :
-  keys = [ 'name',
-           'lines' ]
-  skstat_file = dict.fromkeys ( keys, None )
-  skstat_file['lines'] = []
-  return skstat_file
-
-
-
-def new_skstat_line ( ) :
-  keys = [ 'role',
-           'host',
-           'port' ]
-  skstat_line = dict.fromkeys ( keys, None )
-  return skstat_line
 
 
 
@@ -181,7 +194,9 @@ def read_skstat ( network ) :
     for router in site['routers'] :
       skstat_file_name = f"{site['root']}/pods/{router['pod_name']}/skstat/skstat-c.txt"
       skstat_file = new_skstat_file()
-      skstat_file['name'] = skstat_file_name
+      skstat_file['path']      = skstat_file_name
+      skstat_file['pod_name']  = router['pod_name']
+      skstat_file['site_name'] = site['name']
       with open(skstat_file_name) as f:
         content = f.readlines()
         print ( f"got {len(content)} lines" )
@@ -257,6 +272,11 @@ def find_connection_origins ( network ) :
             event['from_host_name'] = ip_to_router ( network, event['from_host'] )
             if event['from_host_name'] != None :
               find_count += 1
+            else : 
+              print ( f"find_connection_origins: can't find {event['from_host']}" )
+              event['from_host_name'] = ip_to_router_from_skstat ( network, event['from_host'] )
+              if event['from_host_name'] != None :
+                find_count += 1
  
   print ( f"find_connection_origins info: found origins for {find_count} connections." )
   print ( f"find_connection_origins info: failed on {total_count - find_count}." )
