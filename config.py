@@ -9,10 +9,14 @@ import pprint
 
 def new_network ( root ) :
   keys = [ 'root',
-           'sites' ]
+           'sites',
+           'all_events']
+
   network = dict.fromkeys ( keys, None )         
-  network [ 'root' ]  = root
-  network [ 'sites' ] = []
+  network [ 'root' ]       = root
+  network [ 'sites' ]      = []
+  network [ 'all_events' ] = []
+
   return network
 
 
@@ -93,19 +97,14 @@ def get_site_routers ( site_path ) :
 
 def get_service_controller ( site_path, site_name ) :
   service_controller = new_service_controller()
-  print ( f"get_site_service_controller for path {site_path}" )
   site_subdirs = get_dirs ( site_path )
   if "pods" in site_subdirs :
     pods_path = f"{site_path}/pods"
-    print ( f"pods path: {pods_path}" )
     for sc_path in get_dirs(pods_path) :
-      print ( f"{sc_path}" )
       if sc_path.startswith('skupper-service-controller') :
         pod_yaml_path = f"{pods_path}/{sc_path}/pod.yaml"
-        print ( f"HERE: {pod_yaml_path}" )
         with open (pod_yaml_path, 'r') as file:
           pod_yaml_data = yaml.safe_load ( file )
-          print ( "Got the data!" )
           if 'status' in pod_yaml_data :
             status_data = pod_yaml_data['status']
             if 'podIP' in status_data :
@@ -187,8 +186,6 @@ def read_site ( network, path ) :
 
   site['routers']            = get_site_routers ( path )
   site['service_controller'] = get_service_controller ( path, site['name'] )
-
-  #print ( f"GOT SERVICE CONTROLLER {site['service_controller']}" )
 
   network['sites'].append(site)
 

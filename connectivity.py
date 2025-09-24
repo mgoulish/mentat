@@ -30,34 +30,19 @@ def usec_to_duration ( microseconds ) :
 
 # returns host pod name and site name
 def ip_to_router ( network, from_host ) :
-  #print ( f"ip_to_router looking for from_host {from_host}" )
   if from_host == 'localhost' :
-    #print ( "ip_to_router fail can't do localhost")
     return None
 
   for site in network['sites'] :
-    #print ( f"ip_to_router checking site {site['name']}" )
     for router in site['routers'] :
-      #print ( f"ip_to_router: checking router {router['pod_name']}" )
-      #print ( f"   here is the whole router:  {router} " )
       ip_list = router['ip']
-      #print ( f"from_host router has ips: {ip_list}" )
       for ip in ip_list :
-        #print ( f"ip_to_router: checking ip {ip} against from_host {from_host}" )
         if ip == from_host :
-          #print ( f"ip_to_router success: {from_host} --> {router['pod_name']} " )
           return router['pod_name']
-        #else:
-          #print ( "nope" )
     # This site's router didn't match -- try the service controller.
-    print ( f"no match yet for {from_host}. but heres this sites service controller:" )
-    print ( site['service_controller'] )
-    print ( site['service_controller']['name'] )
     if site['service_controller']['pod_ip'] == from_host :
-      print ( "THAT's A MATCH" )
       return site['service_controller']['name']
 
-  #print ( f"ip_to_router: fail finding {from_host} " )
   return None
 
 
@@ -135,13 +120,12 @@ def new_connection ( raw_event ) :
 # of two raw events: a connection-accepted event, and a 
 # corresponding connection termination event, if any.
 def make_connections ( network ) :
+  cnx_count = 0
   for site in network['sites'] :
     # First, make sure that the events in this site are all sorted timewise.
     sorted_events = sorted(site['raw_events'], key=lambda x: x['epoch_micros'])
     site['raw_events'] = sorted_events
 
-    print ( f"\nmake_connections for site {site['name']} ==========================\n" )
-    cnx_count = 0
     for re in site['raw_events'] :
       if re['type'] == 'connection_accepted' :
         # This is the 'cooked' event that will
@@ -167,20 +151,15 @@ def make_connections ( network ) :
         # connection accepted event.
         site['events'].append ( cnx )
         cnx_count += 1
-    print ( f"make_connections: made {cnx_count} connections" )
-
+  print ( f"make_connections info: made {cnx_count} connections" )
 
 
 
 def find_connection_origins ( network ) :
-  print ( "\n\nfind_connection_origins *******************************************\n" )
-  fail_count  = 0
-  total_count = 0
+  find_count = 0
   for site in network['sites'] :
     for event in site['events'] :
       if event['type'] == 'connection' :
-        total_count += 1
-
         # If the connection came from localhost check
         # the mode of the port it came in on.
         # that will serve as a confirmation that it is a client 
@@ -197,27 +176,18 @@ def find_connection_origins ( network ) :
             sys.exit(1)
           if role == 'normal' :
             event['connection_type'] = 'client'
-          else :
-            print ( f"find_connection_origins: case 1 FAILURE" )
-            fail_count += 1
+            find_count += 1
 
         else :
           # for example: 254.18.23.2
           pattern = r'^\d+\.\d+\.\d+\.\d+$'
           match = re.match ( pattern, event['from_host'] )
           if match :
-            # HERE
-            event['from_host_name']  = ip_to_router ( network, event['from_host'] )
-            print ( f"ip_to_router returned {event['from_host_name'] }" )
-            if event['from_host_name'] == None :
-              print ( "\nCan't get hostname on this one: " )
-              pprint.pprint(event)
-            event['connection_type'] = 'TEMP'
-          else :
-            fail_count += 1
+            event['from_host_name'] = ip_to_router ( network, event['from_host'] )
+            if event['from_host_name'] != None :
+              find_count += 1
  
-
-  print ( f"\n\nfind_connection_origins failed on {fail_count} out of {total_count} events\n\n" )
+  print ( f"find_connection_origins info: found origins for {find_count} connections" )
 
 
 
