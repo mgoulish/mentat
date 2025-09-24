@@ -66,15 +66,17 @@ def ip_to_router ( network, from_host ) :
 
 
 
-def ip_to_router_from_skstat ( network, from_host ) :
-  print ( "ip_to_router_from_skstat" )
+def ip_to_router_from_skstat ( network, event ) :
+  #print ( "ip_to_router_from_skstat" )
   for skstat in network['skstats'] :
-    print ( f"site {skstat['site_name']} pod {skstat['pod_name']}" ) 
+    #print ( f"site {skstat['site_name']} pod {skstat['pod_name']}" ) 
     for line in skstat['lines'] : 
-      if line['host'] == from_host :
-        print ( "match !" )
-        return skstat['pod_name']
-  return None
+      if line['host'] == event['from_host'] :
+        #print ( "match !" )
+        print ( f"ip_to_router_from_skstat I see role of:  {line['role']}" )
+        event['from_host_name']  = skstat['pod_name']
+        event['connection_type'] = line['role']
+        return 
 
 
 
@@ -189,7 +191,7 @@ def make_connections ( network ) :
 # Example of the path to the files:  ./wynford/pods/skupper-router-7f4bf489d5-lmzhp/skstat/skstat-c.txt
 def read_skstat ( network ) :
   skstat_files = []
-  print ( "\nread_skstat -----------------------" )
+  #print ( "\nread_skstat -----------------------" )
   for site in network['sites'] :
     for router in site['routers'] :
       skstat_file_name = f"{site['root']}/pods/{router['pod_name']}/skstat/skstat-c.txt"
@@ -199,7 +201,7 @@ def read_skstat ( network ) :
       skstat_file['site_name'] = site['name']
       with open(skstat_file_name) as f:
         content = f.readlines()
-        print ( f"got {len(content)} lines" )
+        #print ( f"got {len(content)} lines" )
         read = False
         line_count = 0
         for line in content :
@@ -230,7 +232,7 @@ def read_skstat ( network ) :
 
           if '=====' in line :
             read = True
-            print ( f"Start reading after line {line_count}" )
+            #print ( f"Start reading after line {line_count}" )
       skstat_files.append(skstat_file)
 
   return skstat_files
@@ -257,6 +259,7 @@ def find_connection_origins ( network ) :
             print ( f"find_connection_origins error: can't get port from {event['to_port']}" )
             sys.exit(1)
           role = find_port_role ( site, port )
+          print ( f"find_connection_origins role == {role}" )
           if role == None :
             print ( f"find_connection_origins error: can't get role from {site['name']} {port}" )
             sys.exit(1)
@@ -273,9 +276,12 @@ def find_connection_origins ( network ) :
             if event['from_host_name'] != None :
               find_count += 1
             else : 
-              print ( f"find_connection_origins: can't find {event['from_host']}" )
-              event['from_host_name'] = ip_to_router_from_skstat ( network, event['from_host'] )
+              #print ( f"find_connection_origins: can't find {event['from_host']}" )
+              #event['from_host_name'], event['type'] = ip_to_router_from_skstat ( network, event['from_host'] )
+              ip_to_router_from_skstat ( network, event )
               if event['from_host_name'] != None :
+                print ( f"found {event['from_host_name']} using skstat" )
+                print ( f"also found type {event['type']} using skstat" )
                 find_count += 1
  
   print ( f"find_connection_origins info: found origins for {find_count} connections." )

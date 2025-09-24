@@ -27,6 +27,7 @@ def write_report ( network ) :
     print ( f"\n{event_count} : {event['timestamp']} {event['type']}" ) 
     print ( f"   to        : {event['to_router']}:{event['to_port']} " ) 
     print ( f"   from      : {event['from_host_name']}:{event['from_port']} " ) 
+    print ( f"   type      : {event['connection_type']}" ) 
     
     # TEMP
     #if event['from_host_name'] == None :
@@ -70,11 +71,13 @@ print ( "\nmain info: making connections" )
 connectivity.make_connections        ( network )
 connectivity.find_connection_origins ( network )
 
-#print ( "\nmain info: writing report" )
-#write_report ( network )
+print ( "\nmain info: writing report" )
+write_report ( network )
 
-print ( "\n\n\n=============================  SKSTATS =============================" )
-pprint.pprint ( network['skstats'] )
+
+
+#print ( "\n\n\n=============================  SKSTATS =============================" )
+#pprint.pprint ( network['skstats'] )
 
 
 #print ( "\n\nmain: events:\n" )
