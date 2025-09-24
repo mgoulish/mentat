@@ -57,6 +57,24 @@ def find_port_role ( site, port ) :
 
 
 
+def new_skstat_file ( ) :
+  keys = [ 'name',
+           'lines' ]
+  skstat_file = dict.fromkeys ( keys, None )
+  skstat_file['lines'] = []
+  return skstat_file
+
+
+
+def new_skstat_line ( ) :
+  keys = [ 'role',
+           'host',
+           'port' ]
+  skstat_line = dict.fromkeys ( keys, None )
+  return skstat_line
+
+
+
 # Here is what a connection_accepted event looks like
 #{
 #  'connection_id': 'C65142', 
@@ -155,11 +173,64 @@ def make_connections ( network ) :
 
 
 
+# Example of the path to the files:  ./wynford/pods/skupper-router-7f4bf489d5-lmzhp/skstat/skstat-c.txt
+def read_skstat ( network ) :
+  skstat_files = []
+  print ( "\nread_skstat -----------------------" )
+  for site in network['sites'] :
+    for router in site['routers'] :
+      skstat_file_name = f"{site['root']}/pods/{router['pod_name']}/skstat/skstat-c.txt"
+      skstat_file = new_skstat_file()
+      skstat_file['name'] = skstat_file_name
+      with open(skstat_file_name) as f:
+        content = f.readlines()
+        print ( f"got {len(content)} lines" )
+        read = False
+        line_count = 0
+        for line in content :
+          line_count += 1
+          if read :
+            words = line.split()
+            # Here are the field names of each line:
+            #  (taken from the file) 
+            #  1   id     
+            #  2   host                                         
+            #  3   container                                               
+            #  4   role               
+            #  5   proto  
+            #  6   dir  
+            #  7   security                         
+            #  8   authentication                  
+            #  9   meshId  
+            #  10  last 
+            #  11  dlv      
+            #  12  uptime
+            role = words[3]
+            if role.startswith('inter-router') :
+              skstat_line = new_skstat_line()
+              skstat_line['role'] = role
+              skstat_line['host'] = words[1].split(':')[0]
+              skstat_line['port'] = words[1].split(':')[1]
+              skstat_file['lines'].append ( skstat_line )
+
+          if '=====' in line :
+            read = True
+            print ( f"Start reading after line {line_count}" )
+      skstat_files.append(skstat_file)
+
+  return skstat_files
+
+          
+
+
+
 def find_connection_origins ( network ) :
-  find_count = 0
+  find_count   = 0
+  total_count  = 0
   for site in network['sites'] :
     for event in site['events'] :
       if event['type'] == 'connection' :
+        total_count += 1
         # If the connection came from localhost check
         # the mode of the port it came in on.
         # that will serve as a confirmation that it is a client 
@@ -187,7 +258,8 @@ def find_connection_origins ( network ) :
             if event['from_host_name'] != None :
               find_count += 1
  
-  print ( f"find_connection_origins info: found origins for {find_count} connections" )
+  print ( f"find_connection_origins info: found origins for {find_count} connections." )
+  print ( f"find_connection_origins info: failed on {total_count - find_count}." )
 
 
 

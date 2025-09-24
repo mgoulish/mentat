@@ -10,7 +10,8 @@ import pprint
 def new_network ( root ) :
   keys = [ 'root',
            'sites',
-           'all_events']
+           'all_events',
+           'skstats' ]
 
   network = dict.fromkeys ( keys, None )         
   network [ 'root' ]       = root

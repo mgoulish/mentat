@@ -290,7 +290,8 @@ def parse_no_protocol_header_found ( log_line ) :
   event['line'] = log_line
   event['type'] = 'no_protocol_header'
 
-  pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + host_port
+  pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + host_port 
+
   match = re.match ( pattern, log_line)
   if match :
     event['timestamp']     = match.group(1) + ' ' + match.group(2)
