@@ -14,6 +14,12 @@ import connectivity
 
 
 
+
+
+lines = False
+
+
+
 def write_report ( network ) :
   for site in network['sites'] :
     network['all_events'].extend ( site['events'] )
@@ -29,12 +35,6 @@ def write_report ( network ) :
     print ( f"   from      : {event['from_host_name']}:{event['from_port']} " ) 
     print ( f"   type      : {event['connection_type']}" ) 
     
-    # TEMP
-    #if event['from_host_name'] == None :
-      #pprint.pprint ( event )
-      #sys.exit(1)
-
-
     duration_label = event['duration_hms']
     if duration_label == None :
       duration_label = "unterminated"
@@ -43,7 +43,34 @@ def write_report ( network ) :
     if duration_label != None :    # This connection was terminated before end of data
       if event['disconnect_event'] != None :
         print ( f"   error     : {event['disconnect_event']['type']}" )
-        # pprint.pprint ( event['disconnect_event'] )
+
+
+
+def write_terminated_report ( network ) :
+  for site in network['sites'] :
+    network['all_events'].extend ( site['events'] )
+    print ( f"  site {site['name']} has {len(site['events'])} events" )
+  print (f"network now has {len(network['all_events'])} total events")
+  sorted_events = sorted(network['all_events'], key=lambda x: x['micros'])
+  site['all_events'] = sorted_events
+  event_count = 0
+  for event in site['all_events'] :
+    if event['duration_hms'] == None :   # This connection did not terminate in the data
+      continue
+    event_count += 1
+    print ( f"\n{event_count} : {event['timestamp']} {event['type']}" ) 
+    print ( f"   to        : {event['to_router']}:{event['to_port']} " ) 
+    print ( f"   from      : {event['from_host_name']}:{event['from_port']} " ) 
+    print ( f"   type      : {event['connection_type']}" ) 
+    print ( f"   duration  : {event['duration_hms']} " ) 
+
+    if event['disconnect_event'] != None :
+      print ( f"   error     : {event['disconnect_event']['type']}" )
+
+    if lines :
+      for line in event['lines'] :
+        print ( f"    {line}" )
+      
 
 
 
@@ -76,10 +103,33 @@ connectivity.find_connection_origins ( network )
 print ( "\n\n\n" )
 while True:
     command = input("command: ")
+    if command == 'help' or command == 'h' :
+      print ( "q         quit" )
+      print ( "report    write full report" )
+      print ( "term      report terminated connections" )
+      print ( "lines     toggle line display in reports" )
+      continue
+
     if command == 'q' or command == 'quit' :
       break
+
     if command == 'report' :
       write_report ( network )
+      continue
+
+    if command == 'terminated' or command == 'term' :
+      write_terminated_report ( network )
+      continue
+
+    if command == 'lines' :
+      lines = not lines
+      if lines : 
+        print ( "    lines printing is now ON" )
+      else:
+        print ( "    lines printing is now OFF" )
+      continue
+
+
 
 
 #print ( "\nmain info: writing report" )
