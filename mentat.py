@@ -71,8 +71,19 @@ print ( "\nmain info: making connections" )
 connectivity.make_connections        ( network )
 connectivity.find_connection_origins ( network )
 
-print ( "\nmain info: writing report" )
-write_report ( network )
+
+
+print ( "\n\n\n" )
+while True:
+    command = input("command: ")
+    if command == 'q' or command == 'quit' :
+      break
+    if command == 'report' :
+      write_report ( network )
+
+
+#print ( "\nmain info: writing report" )
+#write_report ( network )
 
 
 

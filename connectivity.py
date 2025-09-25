@@ -73,7 +73,7 @@ def ip_to_router_from_skstat ( network, event ) :
     for line in skstat['lines'] : 
       if line['host'] == event['from_host'] :
         #print ( "match !" )
-        print ( f"ip_to_router_from_skstat I see role of:  {line['role']}" )
+        #print ( f"ip_to_router_from_skstat I see role of:  {line['role']}" )
         event['from_host_name']  = skstat['pod_name']
         event['connection_type'] = line['role']
         return 
@@ -259,7 +259,7 @@ def find_connection_origins ( network ) :
             print ( f"find_connection_origins error: can't get port from {event['to_port']}" )
             sys.exit(1)
           role = find_port_role ( site, port )
-          print ( f"find_connection_origins role == {role}" )
+          #print ( f"find_connection_origins role == {role}" )
           if role == None :
             print ( f"find_connection_origins error: can't get role from {site['name']} {port}" )
             sys.exit(1)
@@ -280,8 +280,8 @@ def find_connection_origins ( network ) :
               #event['from_host_name'], event['type'] = ip_to_router_from_skstat ( network, event['from_host'] )
               ip_to_router_from_skstat ( network, event )
               if event['from_host_name'] != None :
-                print ( f"found {event['from_host_name']} using skstat" )
-                print ( f"also found type {event['type']} using skstat" )
+                #print ( f"found {event['from_host_name']} using skstat" )
+                #print ( f"also found type {event['type']} using skstat" )
                 find_count += 1
  
   print ( f"find_connection_origins info: found origins for {find_count} connections." )
