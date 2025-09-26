@@ -100,6 +100,7 @@ def parse_connection_accepted_line ( log_line ):
     return event
   else :
     print ( f"connection accepted match failed on line: {log_line}" )
+    sys.exit(1)
         
 
 
@@ -150,7 +151,7 @@ def parse_unknown_protocol ( log_line ) :
     event['to']            = match.group(7)
     event['epoch_micros']  = string_to_microseconds_since_epoch ( f"{match.group(1)} {match.group(2)}" )
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_unknown_protocol error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
   return event
@@ -176,7 +177,7 @@ def parse_no_route_to_host ( log_line ) :
     event['to']            = match.group(6)
     event['message']       = match.group(7)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_no_route_to_host error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
   
   return event
@@ -199,7 +200,7 @@ def parse_connection_timed_out ( log_line ) :
     event['id']            = match.group(3)
     event['to']            = match.group(4)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_connection_timed_out error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
   return event
@@ -224,7 +225,7 @@ def parse_connection_reset_by_peer ( log_line ) :
     event['connection_id'] = match.group(5)
     event['to']            = match.group(6)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_connection_reset_by_peer error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
   return event
@@ -236,22 +237,38 @@ def parse_unexpected_eof ( log_line ) :
   # example :
   # 2025-07-31 13:22:58.374561 +0000 FLOW_LOG (info) LOG [lmzhp:20] BEGIN END parent=lmzhp:0 logSeverity=3 logText=LOG_SERVER: [C7] Connection to 254.14.21.121:55671 failed: amqp:connection:framing-error SSL Failure: error:0A000126:SSL routines::unexpected eof while reading sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
   # 2025-07-31 13:22:58.404151 +0000 FLOW_LOG (info) LOG [dv879:480] BEGIN END parent=dv879:0 logSeverity=3 logText=LOG_SERVER: [C13] Connection to skupper-silm-mongodb.legacy.ocp-prd-wyn.bell.corp.bce.ca:30411 failed: amqp:connection:framing-error SSL Failure: error:0A000126:SSL routines::unexpected eof while reading sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1102
+
+  # 2025-09-12 19:26:51.557720 +0000 FLOW_LOG (info) LOG [nnbw6:431643] BEGIN END parent=nnbw6:0 logSeverity=3 logText=LOG_SERVER: [C2764] Connection from 254.12.2.1:35829 (to :55671) failed: amqp:connection:framing-error SSL Failure: error:0A000126:SSL routines::unexpected eof while reading sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1109
+
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'unexpected_eof'
 
-  #pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + endpoint
-  pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + string
-  match = re.match ( pattern, log_line)
-  if match :
-    event['timestamp']     = match.group(1) + ' ' + match.group(2)
-    event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
-    event['id']            = match.group(3) 
-    event['parent']        = match.group(4)
-    event['connection_id'] = match.group(5)
-    event['to']            = match.group(6)
+  if "Connection to" in log_line :
+    to_pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection to " + string
+    match = re.match ( to_pattern, log_line)
+    if match :
+      event['timestamp']     = match.group(1) + ' ' + match.group(2)
+      event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
+      event['id']            = match.group(3) 
+      event['parent']        = match.group(4)
+      event['connection_id'] = match.group(5)
+      event['to']            = match.group(6)
+    else :
+      print ( f"parse_unexpected_eof error: {event['type']} match failed on line: {log_line}" )
+      sys.exit(1)
+  elif "Connection from" in log_line :
+    from_pattern = date_time + skip + brackets + skip + parent + skip + brackets + skip + "Connection from " + string
+    match = re.match ( from_pattern, log_line)
+    if match :
+      event['timestamp']     = match.group(1) + ' ' + match.group(2)
+      event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
+      event['id']            = match.group(3) 
+      event['parent']        = match.group(4)
+      event['connection_id'] = match.group(5)
+      event['from']          = match.group(6)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_unexpected_eof error: neither to nor from in line: {log_line}" )
     sys.exit(1)
 
   return event
@@ -275,7 +292,7 @@ def parse_configuration_failed ( log_line ) :
     event['parent']        = match.group(4)
     event['connection_id'] = match.group(5)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_configuration_failed error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
   return event
@@ -301,7 +318,7 @@ def parse_no_protocol_header_found ( log_line ) :
     event['connection_id'] = match.group(5)
     event['to']            = match.group(6)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_no_protocol_header_found error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
   return event
@@ -327,7 +344,7 @@ def parse_no_cert ( log_line ) :
     event['from']          = match.group(6)
     event['to']            = match.group(7)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_no_cert error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
   return event
@@ -351,21 +368,19 @@ def parse_setup_error ( log_line ) :
     event['parent']        = match.group(4)
     event['connection_id'] = match.group(5)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_setup_error error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
 
   return event
 
 
 
-# done
 def parse_direction_outgoing ( log_line ) :
   # example :
   # 2025-07-31 13:23:31.032207 +0000 FLOW_LOG (info) LINK [lmzhp:11] BEGIN END parent=lmzhp:0 mode=interior name=skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 linkCost=1 direction=outgoing
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'direction_outgoing'
-
   pattern = date_time + skip + brackets + skip + parent + skip + "name=" + hostname
   match = re.match ( pattern, log_line)
   if match :
@@ -375,9 +390,36 @@ def parse_direction_outgoing ( log_line ) :
     event['parent']        = match.group(4)
     event['to']            = match.group(5)
   else :
-    print ( f"{event['type']} match failed on line: {log_line}" )
+    print ( f"parse_direction_outgoing error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
+  return event
 
+
+
+def parse_local_idle_timeout_expired ( log_line ) :
+  # example :
+  # 2025-09-16 04:17:20.782885 +0000 FLOW_LOG (info) LOG [nnbw6:1047147] BEGIN END parent=nnbw6:0 logSeverity=3 logText=LOG_SERVER: [C2762] Connection from 254.12.2.1:55324 (to :55671) failed: amqp:resource-limit-exceeded local-idle-timeout expired sourceFile=/remote-source/skupper-router/app/src/server.c sourceLine=1109
+  event = new_raw_event ( )
+  event['line'] = log_line
+  event['type'] = 'local_idle_timeout_expired'
+
+  to_in_parentheses = r'\(to (\:\d+)\)'
+  failure_message   = r'failed: (.*?) sourceFile=/remote'
+
+  pattern = date_time + skip + brackets + skip + parent + skip + brackets + " Connection from " + endpoint + skip + to_in_parentheses + skip + failure_message
+  match = re.match ( pattern, log_line)
+  if match :
+    event['timestamp']     = match.group(1) + ' ' + match.group(2)
+    event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
+    event['id']            = match.group(3)
+    event['parent']        = match.group(4)
+    event['connection_id'] = match.group(5)
+    event['from']          = match.group(6)
+    event['to']            = match.group(7)
+    event['message']       = match.group(8)
+  else :
+    print ( f"local_idle_timeout_expired error: {event['type']} match failed on line: {log_line}" )
+    sys.exit(1)
   return event
 
 
@@ -395,6 +437,7 @@ def parse_BEGIN_END_line ( log_line ) :
     "did not return a certificate" : parse_no_cert,
     "internal setup error"         : parse_setup_error,
     "direction=outgoing"           : parse_direction_outgoing,
+    "local-idle-timeout"           : parse_local_idle_timeout_expired,
   }
 
   for error, handler in error_handlers.items():
@@ -426,11 +469,5 @@ def find_begin_end_lines ( sites ) :
           raw_event['lines'].append ( line )  
           site ['raw_events'].append ( raw_event )
           #print ( f"found {raw_event['type']}" )
-
-
-
-    
-  
-
 
 
