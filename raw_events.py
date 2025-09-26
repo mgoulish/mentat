@@ -378,6 +378,7 @@ def parse_setup_error ( log_line ) :
 def parse_direction_outgoing ( log_line ) :
   # example :
   # 2025-07-31 13:23:31.032207 +0000 FLOW_LOG (info) LINK [lmzhp:11] BEGIN END parent=lmzhp:0 mode=interior name=skupper-prd-wyn-skupper-router-78979fc89c-jfhn8 linkCost=1 direction=outgoing
+  #
   event = new_raw_event ( )
   event['line'] = log_line
   event['type'] = 'direction_outgoing'
@@ -391,6 +392,27 @@ def parse_direction_outgoing ( log_line ) :
     event['to']            = match.group(5)
   else :
     print ( f"parse_direction_outgoing error: {event['type']} match failed on line: {log_line}" )
+    sys.exit(1)
+  return event
+
+
+
+def parse_direction_incoming ( log_line ) :
+  # example :
+  # 2025-09-16 04:17:08.177849 +0000 FLOW_LOG (info) LINK [nnbw6:431682] BEGIN END parent=nnbw6:0 mode=interior name=prd-dor-skupper-router-84cc4dd57b-ngtsp direction=incoming
+  event = new_raw_event ( )
+  event['line'] = log_line
+  event['type'] = 'direction_incoming'
+  pattern = date_time + skip + brackets + skip + parent + skip + "name=" + hostname
+  match = re.match ( pattern, log_line)
+  if match :
+    event['timestamp']     = match.group(1) + ' ' + match.group(2)
+    event['epoch_micros']  = string_to_microseconds_since_epoch(event['timestamp']) 
+    event['id']            = match.group(3)
+    event['parent']        = match.group(4)
+    event['to']            = match.group(5)
+  else :
+    print ( f"parse_direction_incoming error: {event['type']} match failed on line: {log_line}" )
     sys.exit(1)
   return event
 
@@ -437,6 +459,7 @@ def parse_BEGIN_END_line ( log_line ) :
     "did not return a certificate" : parse_no_cert,
     "internal setup error"         : parse_setup_error,
     "direction=outgoing"           : parse_direction_outgoing,
+    "direction=incoming"           : parse_direction_incoming,
     "local-idle-timeout"           : parse_local_idle_timeout_expired,
   }
 
