@@ -6,6 +6,8 @@ import re
 from   datetime import datetime, timezone
 import pprint
 
+import commands
+
 
 
 
@@ -106,7 +108,7 @@ def read_router_log ( mentat, router, log_file_path, line_list, router_name_pref
 
 
 
-def print_events ( mentat ) :
+def print_router_events ( mentat ) :
   print ( "\n\n\n" )
   for site in mentat['sites'] :
     print ( "========================================================" )
@@ -155,6 +157,9 @@ def read_events ( mentat ) :
             elif basename == 'router-logs.txt' :
               print ( f"mentat info: main: reading latest events for router {router['name']}" )
               read_router_log ( mentat, router, file_name, router['current_events'], None )  
+  print ( f"mentat info: sorting events" )
+  sorted_events = sorted(mentat['events'], key=lambda x: x['micros'])
+  mentat['events'] = sorted_events
 
   
 
@@ -166,8 +171,8 @@ root   =  sys.argv[1]
 mentat = new_mentat ( root )
 
 read_events ( mentat )
-
-#print_events ( mentat )
-
 print ( f"mentat now has {len(mentat['events'])} total events" )
+#print_router_events ( mentat )
+
+commands.accept_commands ( mentat )
 
