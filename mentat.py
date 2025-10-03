@@ -65,13 +65,14 @@ def new_router ( name, site ) :
 
 
 
-def new_line ( log_line, file_path, line_number, timestamp, router, site ) :
+def new_event ( log_line, file_path, line_number, timestamp, router, site ) :
   keys = [ 'line',
            'file_path',
            'line_number',
            'timestamp',
            'micros',
-           'router' ]
+           'router',
+           'id'  ]
   line = dict.fromkeys ( keys, None )
   line['line']        = log_line
   line['file_path']   = file_path
@@ -100,7 +101,7 @@ def read_router_log ( mentat, router, log_file_path, line_list, router_name_pref
       match = re.match ( timestamp_regex, line_str )
       if match :
         line_count += 1
-        line = new_line ( line_str, log_file_path, line_count, match.group(1), router_name, router['site'] )
+        line = new_event ( line_str, log_file_path, line_count, match.group(1), router_name, router['site'] )
         line_list.append ( line )
         # Also append this line to the grand top-level list
         mentat['events'].append ( line )
@@ -157,9 +158,17 @@ def read_events ( mentat ) :
             elif basename == 'router-logs.txt' :
               print ( f"mentat info: main: reading latest events for router {router['name']}" )
               read_router_log ( mentat, router, file_name, router['current_events'], None )  
+
+  # Sort the unified list in chronological order
   print ( f"mentat info: sorting events" )
   sorted_events = sorted(mentat['events'], key=lambda x: x['micros'])
   mentat['events'] = sorted_events
+
+  # And assign IDs to them all
+  id = 1
+  for event in mentat['events'] :
+    event['id'] = id
+    id += 1
 
   
 
