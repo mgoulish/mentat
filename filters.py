@@ -49,7 +49,7 @@ def list_filtered_results ( mentat, _ ) :
 
 
 
-def filter_start ( mentat, command_line ) :
+def start ( mentat, command_line ) :
   pattern = leading_whitespace + "start" + skip + date_time
 
   match = re.match ( pattern, command_line )
@@ -64,7 +64,7 @@ def filter_start ( mentat, command_line ) :
 
 
 
-def filter_stop ( mentat, command_line ) :
+def stop ( mentat, command_line ) :
   pattern = leading_whitespace + "stop" + skip + date_time
 
   match = re.match ( pattern, command_line )
@@ -79,7 +79,7 @@ def filter_stop ( mentat, command_line ) :
 
 
 
-def filter_grep ( mentat, command_line ) :
+def grep ( mentat, command_line ) :
   words = command_line.split()
   if len(words) < 2 :
     print ( "put a word on the commad line to grep for" )

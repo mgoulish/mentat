@@ -41,36 +41,68 @@ def show_filter_command ( mentat, _ ) :
   print ( "show filter!" )
 
 
+
+def show_help ( mentat, _ ) :
+  for command in commands :
+    print ( " " )
+    print ( f"{command['name']} {command['args']}" )
+    print ( f"    {command['description']}" )
+  print ( '\n' )
+  
+
   
 
 
 # Don't forget to put new commands in here!
 commands = [
-    {'name': 'list',       
-     'fn': filters.list_filtered_results,
-    },
     {'name': 'count',
      'fn': count_command,
+     'args' : ' ',
+     'description' : 'show count of events after current filter chain',
+    },
+    {'name': 'grep',
+     'fn'  : filters.grep,
+     'args' : 'string',
+     'description' : 'match lines that contain string',
+    },
+    {'name': 'help',       
+     'fn':    show_help,
+     'args' :  ' ',
+     'description' : 'show all commands and their args',
+    },
+    {'name': 'list',       
+     'fn': filters.list_filtered_results,
+     'args' :  ' ',
+     'description' : 'show results of current filter chain',
     },
     {'name': 'quit',       
      'fn': quit_command,
+     'args' : ' ',
+     'description' : 'exit program'
+    },
+    {'name': 'show_filter_chain',
+     'fn'  : show_filter_command,
+     'args' : ' ',
+     'description' : 'show each filter in the current filter chain',
+    },
+    {'name': 'start',      
+     'fn': filters.start,
+     'args' : 'YYYY-MM-DD HH:MM:SS',
+     'description' : 'Set the start of the visible time window.',
+    },
+    {'name': 'stop',       
+     'fn': filters.stop,
+     'args' : 'YYYY-MM-DD HH:MM:SS',
+     'description' : 'Set the end of the visible time window.',
     },
     {'name': 'time_range', 
      'fn': time_range_command,
-    },
-    {'name': 'start',      
-     'fn': filters.filter_start,
-    },
-    {'name': 'stop',       
-     'fn': filters.filter_stop,
-    },
-    {'name': 'grep',
-     'fn'  : filters.filter_grep,
-    },
-    {'name': 'show_filter',
-     'fn'  : show_filter_command,
+     'args' : ' ',
+     'description' : 'show start and end of entire data set (unfiltered)',
     },
 ]
+
+
 
 
 
