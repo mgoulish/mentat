@@ -15,7 +15,7 @@ import filters
 
 # This just shows the user the start and stop times 
 # for the current data set.
-def time_range_command ( mentat ) :
+def time_range_command ( mentat, _ ) :
   n_events        = len(mentat['events'])
   first_timestamp = mentat['events'][0]['timestamp']
   last_timestamp  = mentat['events'][n_events - 1]['timestamp']
@@ -23,38 +23,68 @@ def time_range_command ( mentat ) :
 
 
   
-def quit_command ( mentat ) :
+def quit_command ( mentat, _ ) :
   print ( "quitting..." )
   sys.exit ( 0 )
+
+
+def count_command ( mentat, _ ) :
+  # TODO  make this handle case where there is a current results list
+  if len(filters.current_filter_chain['filters']) == 0 :
+    event_count = 0
+    for event in mentat['events'] :
+      event_count += 1
+  print ( f'\n {event_count} events' )
+
+
+def show_filter_command ( mentat, _ ) :
+  print ( "show filter!" )
+
+
   
 
 
 # Don't forget to put new commands in here!
 commands = [
-    {'name': 'list',       'fn': filters.list_filtered_results },
-    {'name': 'count',      'fn': filters.count },
-    {'name': 'quit',       'fn': quit_command },
-    {'name': 'time_range', 'fn': time_range_command },
-    {'name': 'start',      'fn': filters.start },
-    {'name': 'stop',       'fn': filters.stop },
+    {'name': 'list',       
+     'fn': filters.list_filtered_results,
+    },
+    {'name': 'count',
+     'fn': count_command,
+    },
+    {'name': 'quit',       
+     'fn': quit_command,
+    },
+    {'name': 'time_range', 
+     'fn': time_range_command,
+    },
+    {'name': 'start',      
+     'fn': filters.filter_start,
+    },
+    {'name': 'stop',       
+     'fn': filters.filter_stop,
+    },
+    {'name': 'grep',
+     'fn'  : filters.filter_grep,
+    },
+    {'name': 'show_filter',
+     'fn'  : show_filter_command,
+    },
 ]
 
 
 
 def resolve_command ( prefix, command_line, commands, mentat ) :
-    matches = [cmd for cmd in commands if cmd['name'].startswith(prefix)]
+  matches = [cmd for cmd in commands if cmd['name'].startswith(prefix)]
 
-    if len(matches) == 0:
-        print(f"No command starts with '{prefix}'")
-    elif len(matches) == 1:
-        if matches[0]['name'] == 'start' or matches[0]['name'] == 'stop' :
-          matches[0]['fn'] ( mentat, command_line )
-        else:
-          matches[0]['fn'] ( mentat )  # Execute the function
-    else:
-        print(f"Multiple commands match '{prefix}':")
-        for cmd in matches:
-            print(f"- {cmd['name']}")
+  if len(matches) == 0:
+    print(f"No command starts with '{prefix}'")
+  elif len(matches) == 1:
+    matches[0]['fn'] ( mentat, command_line )
+  else:
+    print(f"Multiple commands match '{prefix}':")
+    for cmd in matches:
+      print(f"- {cmd['name']}")
 
 
 
