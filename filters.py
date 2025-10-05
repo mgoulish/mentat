@@ -28,6 +28,15 @@ date_time             = date + whitespace + time
 
 
 
+def new_filter ( name ) :
+  keys = [ 'name',
+           'args' ]
+  data_filter = dict.fromkeys ( keys, None )
+  data_filter['name'] = name
+  data_filter['args'] = []
+  return data_filter
+
+
 
 # Expected format: 2025-09-16 04:22:22.956513
 def string_to_microseconds_since_epoch ( s ):
@@ -57,10 +66,10 @@ def start ( mentat, command_line ) :
     print ( f"filters start error: could not match |{command_line}|" )
     sys.exit ( 0 )
   timestamp = f"{match.group(1)} {match.group(2)}" 
-  micros = string_to_microseconds_since_epoch ( timestamp )
-  new_filter = { 'name' : 'start', 'micros' : micros }
-  current_filter_chain['filters'].append ( new_filter )
-  run_current_filter ( mentat, new_filter )
+  start_filter = new_filter ( 'start' )
+  start_filter['args'].append ( timestamp )
+  current_filter_chain['filters'].append ( start_filter )
+  run_current_filter ( mentat, start_filter )
 
 
 
@@ -72,10 +81,10 @@ def stop ( mentat, command_line ) :
     print ( f"filters stop error: could not match |{command_line}|" )
     sys.exit ( 0 )
   timestamp = f"{match.group(1)} {match.group(2)}" 
-  micros = string_to_microseconds_since_epoch ( timestamp )
-  new_filter = { 'name' : 'stop', 'micros' : micros }
-  current_filter_chain['filters'].append ( new_filter )
-  run_current_filter ( mentat, new_filter )
+  stop_filter = new_filter ( 'stop' )
+  stop_filter['args'].append(timestamp)
+  current_filter_chain['filters'].append ( stop_filter )
+  run_current_filter ( mentat, stop_filter )
 
 
 
@@ -85,9 +94,10 @@ def grep ( mentat, command_line ) :
     print ( "put a word on the commad line to grep for" )
     return
   search_word = words[1]
-  new_filter = { 'name' : 'grep', 'word' : search_word }
-  current_filter_chain['filters'].append ( new_filter )
-  run_current_filter ( mentat, new_filter )
+  grep_filter = new_filter ( 'grep' )
+  grep_filter['args']['0']
+  current_filter_chain['filters'].append ( grep_filter )
+  run_current_filter ( mentat, grep_filter )
 
 
 
@@ -95,7 +105,7 @@ def grep ( mentat, command_line ) :
 # Previous ones in the current chain have already been run
 # and the cumulative result is already in the current result list.
 
-def run_current_filter ( mentat, new_filter ) :
+def run_current_filter ( mentat, next_filter ) :
   # If we have no current result list, that means we 
   # have not run any filters yet.
   # In that case, the current result is the entire 
@@ -106,10 +116,10 @@ def run_current_filter ( mentat, new_filter ) :
   
   new_result_list = []
 
-  match new_filter['name'] :
+  match next_filter['name'] :
     case 'start' :
       print ( "running filter 'start'" )
-      start_micros = new_filter['micros']
+      start_micros = string_to_microseconds_since_epoch(next_filter['args'][0])
       for i in current_result_list :   
         event = mentat['events'][i]
         if event['micros'] >= start_micros :
@@ -119,7 +129,7 @@ def run_current_filter ( mentat, new_filter ) :
 
     case 'stop' :
       print ( "running filter 'stop'" )
-      stop_micros = new_filter['micros']
+      stop_micros = string_to_microseconds_since_epoch(next_filter['args'][0])
       for i in current_result_list :    
         event = mentat['events'][i]
         if event['micros'] < stop_micros :
@@ -129,7 +139,7 @@ def run_current_filter ( mentat, new_filter ) :
 
     case 'grep' :
       print ( "running filter 'grep'" )
-      search_word = new_filter['word']
+      search_word = next_filter['args'][0]
       print (f"case grep search word {search_word}")
       for i in current_result_list :
         event = mentat['events'][i]
@@ -141,7 +151,7 @@ def run_current_filter ( mentat, new_filter ) :
 
 
     case _ :
-      print (f"unknown filter name: {new_filter['name']}")
+      print (f"unknown filter name: {next_filter['name']}")
       sys.exit(0)
 
   # The results we just got from this filter 

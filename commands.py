@@ -2,6 +2,7 @@
 
 import sys
 import os
+import pprint
 
 import filters
 
@@ -38,27 +39,45 @@ def count_command ( mentat, _ ) :
 
 
 def show_filter_command ( mentat, _ ) :
-  print ( "show filter!" )
+  if len(filters.current_filter_chain['filters']) == 0 :
+    print ( '\nThere is no current filter chain.\n' )
+    return
+
+  print ( f"\nCurrent Filter Chain", end='' )
+  if filters.current_filter_chain['name'] == None :
+    print ( ': (no name yet)' )
+  else :
+    print ( f": {filters.current_filter_chain['name']}" )
+  
+  count = 0
+  for mfilter in filters.current_filter_chain['filters'] :
+    print ( f"Filter {count}: {mfilter['name']}", end='' )
+    for arg in mfilter['args'] :
+      print ( f" {arg} ", end='' )
+    print (' ')
+    count += 1
+  print ( ' ' )
 
 
 
 def show_help ( mentat, _ ) :
   for command in commands :
-    print ( " " )
-    print ( f"{command['name']} {command['args']}" )
+    print ( f"{command['name']} {command['args']}")
     print ( f"    {command['description']}" )
+  print ( '\n' )
+  print ( "It is not necessary to type the entire command name." )
+  print ( "Just enough characters to disambiguate." )
+  print ( "Entering an ambiguous prefix displays all matching commands." )
   print ( '\n' )
   
 
   
-
-
 # Don't forget to put new commands in here!
 commands = [
     {'name': 'count',
      'fn': count_command,
      'args' : ' ',
-     'description' : 'show count of events after current filter chain',
+     'description' : 'show count of results of current filter chain',
     },
     {'name': 'grep',
      'fn'  : filters.grep,
@@ -101,8 +120,6 @@ commands = [
      'description' : 'show start and end of entire data set (unfiltered)',
     },
 ]
-
-
 
 
 
