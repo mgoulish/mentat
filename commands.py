@@ -30,12 +30,7 @@ def quit_command ( mentat, _ ) :
 
 
 def count_command ( mentat, _ ) :
-  # TODO  make this handle case where there is a current results list
-  if len(filters.current_filter_chain['filters']) == 0 :
-    event_count = 0
-    for event in mentat['events'] :
-      event_count += 1
-  print ( f'\n {event_count} events' )
+  print ( f"There are {len(filters.current_filter_chain['results'])} filtered events out of {len(mentat['events'])} total.")
 
 
 def show_filter_command ( mentat, _ ) :
@@ -69,6 +64,28 @@ def show_help ( mentat, _ ) :
   print ( "Just enough characters to disambiguate." )
   print ( "Entering an ambiguous prefix displays all matching commands." )
   print ( '\n' )
+
+
+
+def undo_command ( mentat, _ ) :
+  
+  if len(filters.current_filter_chain['filters']) == 0 :
+   print ( "\nundo: The filter chain is empty.\n" )
+   return
+
+  print ( f"\nundoing latest filter: {filters.current_filter_chain['filters'][-1]['name']}" )
+
+  name = filters.current_filter_chain['filters'][-1]['name']
+  filters.current_filter_chain['filters'].pop()
+  print ( f"There are now {len(filters.current_filter_chain['filters'])} filters in the current chain." )
+
+  # Now we must re-run the resultant current filter chain,
+  # because its results are now out of date.
+  filters.current_filter_chain['results'] = []
+  for f in filters.current_filter_chain['filters'] :
+    filters.run_filter ( mentat, f )
+  
+  print(f"undo: The current filter chain now has {len(filters.current_filter_chain['results'])} results.\n")
   
 
   
@@ -118,6 +135,11 @@ commands = [
      'fn': time_range_command,
      'args' : ' ',
      'description' : 'show start and end of entire data set (unfiltered)',
+    },
+    {'name': 'undo', 
+     'fn': undo_command,
+     'args' : ' ',
+     'description' : 'undo the most recent filter in the filter chain',
     },
 ]
 

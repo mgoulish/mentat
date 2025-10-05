@@ -13,7 +13,7 @@ from   datetime import datetime, timezone
 # It is just their index numbers in the Mentat list of all events.
 current_filter_chain = { 'name' : None, 
                          'filters' : [],
-                         'result'  : [] }
+                         'results' : [] }
 
 
 
@@ -52,7 +52,7 @@ def list_filtered_results ( mentat, _ ) :
       print ( '\n' )
       pprint.pprint ( event )
   else :
-    for index in current_filter_chain['result'] :
+    for index in current_filter_chain['results'] :
       print ( '\n' )
       pprint.pprint ( mentat['events'][index] )
 
@@ -69,7 +69,7 @@ def start ( mentat, command_line ) :
   start_filter = new_filter ( 'start' )
   start_filter['args'].append ( timestamp )
   current_filter_chain['filters'].append ( start_filter )
-  run_current_filter ( mentat, start_filter )
+  run_filter ( mentat, start_filter )
 
 
 
@@ -84,7 +84,7 @@ def stop ( mentat, command_line ) :
   stop_filter = new_filter ( 'stop' )
   stop_filter['args'].append(timestamp)
   current_filter_chain['filters'].append ( stop_filter )
-  run_current_filter ( mentat, stop_filter )
+  run_filter ( mentat, stop_filter )
 
 
 
@@ -95,9 +95,9 @@ def grep ( mentat, command_line ) :
     return
   search_word = words[1]
   grep_filter = new_filter ( 'grep' )
-  grep_filter['args']['0']
+  grep_filter['args'].append(search_word)
   current_filter_chain['filters'].append ( grep_filter )
-  run_current_filter ( mentat, grep_filter )
+  run_filter ( mentat, grep_filter )
 
 
 
@@ -105,21 +105,21 @@ def grep ( mentat, command_line ) :
 # Previous ones in the current chain have already been run
 # and the cumulative result is already in the current result list.
 
-def run_current_filter ( mentat, next_filter ) :
+def run_filter ( mentat, f ) :
   # If we have no current result list, that means we 
   # have not run any filters yet.
   # In that case, the current result is the entire 
   # list of Mentat events in this data set.
-  current_result_list = current_filter_chain['result']
+  current_result_list = current_filter_chain['results']
   if len(current_result_list) == 0 :
     current_result_list = list(range(len(mentat['events'])))
   
   new_result_list = []
 
-  match next_filter['name'] :
+  match f['name'] :
     case 'start' :
       print ( "running filter 'start'" )
-      start_micros = string_to_microseconds_since_epoch(next_filter['args'][0])
+      start_micros = string_to_microseconds_since_epoch(f['args'][0])
       for i in current_result_list :   
         event = mentat['events'][i]
         if event['micros'] >= start_micros :
@@ -129,7 +129,7 @@ def run_current_filter ( mentat, next_filter ) :
 
     case 'stop' :
       print ( "running filter 'stop'" )
-      stop_micros = string_to_microseconds_since_epoch(next_filter['args'][0])
+      stop_micros = string_to_microseconds_since_epoch(f['args'][0])
       for i in current_result_list :    
         event = mentat['events'][i]
         if event['micros'] < stop_micros :
@@ -139,7 +139,7 @@ def run_current_filter ( mentat, next_filter ) :
 
     case 'grep' :
       print ( "running filter 'grep'" )
-      search_word = next_filter['args'][0]
+      search_word = f['args'][0]
       print (f"case grep search word {search_word}")
       for i in current_result_list :
         event = mentat['events'][i]
@@ -151,12 +151,12 @@ def run_current_filter ( mentat, next_filter ) :
 
 
     case _ :
-      print (f"unknown filter name: {next_filter['name']}")
+      print (f"unknown filter name: {f['name']}")
       sys.exit(0)
 
   # The results we just got from this filter 
   # become the new current results list.
-  current_filter_chain['result'] = new_result_list
+  current_filter_chain['results'] = new_result_list
 
 
 
