@@ -14,6 +14,8 @@ import filters
 #-------------------------------------------------
 
 
+
+
 # This just shows the user the start and stop times 
 # for the current data set.
 def time_range_command ( mentat, _ ) :
@@ -29,8 +31,42 @@ def quit_command ( mentat, _ ) :
   sys.exit ( 0 )
 
 
+
 def count_command ( mentat, _ ) :
   print ( f"There are {len(filters.current_filter_chain['results'])} filtered events out of {len(mentat['events'])} total.")
+
+
+
+def replace_command ( mentat, command_line ) :
+  if len(filters.current_filter_chain['filters']) == 0 :
+    print ( "\nThere are no filters in the current filter chain." )
+    return
+
+  print ( f"command line: |{command_line}|" )
+  words = command_line.split()
+  if len(words) < 2 :
+    print ( "\nGive me an integer argument" )
+    return
+  s = words[1]
+  n = 0
+  try:
+    int(s)
+    n = int(s)
+  except ValueError:
+    print ( f"    {s} is not an integer" )
+    return
+  
+  if n > len(filters.current_filter_chain['filters']) - 1 :
+    print ( f"There are {len(filters.current_filter_chain['filters'])} filters in the current filter chain." )
+    return
+  
+  print ( f"Replacing filter {n} please enter a filter command" )
+  filters.replacing_filter = n
+  print ( f"replace_command: set filters.replacing_filter to {filters.replacing_filter}" )
+
+
+
+
 
 
 def show_filter_command ( mentat, _ ) :
@@ -68,7 +104,6 @@ def show_help ( mentat, _ ) :
 
 
 def undo_command ( mentat, _ ) :
-  
   if len(filters.current_filter_chain['filters']) == 0 :
    print ( "\nundo: The filter chain is empty.\n" )
    return
@@ -116,6 +151,11 @@ commands = [
      'args' : ' ',
      'description' : 'exit program'
     },
+    {'name': 'replace',
+     'fn'  : replace_command,
+     'args' : 'int',
+     'description' : 'replace the Nth filter of your current filter chain',
+    },
     {'name': 'show_filter_chain',
      'fn'  : show_filter_command,
      'args' : ' ',
@@ -124,12 +164,12 @@ commands = [
     {'name': 'start',      
      'fn': filters.start,
      'args' : 'YYYY-MM-DD HH:MM:SS',
-     'description' : 'Set the start of the visible time window.',
+     'description' : 'set the start of the visible time window',
     },
     {'name': 'stop',       
      'fn': filters.stop,
      'args' : 'YYYY-MM-DD HH:MM:SS',
-     'description' : 'Set the end of the visible time window.',
+     'description' : 'set the end of the visible time window',
     },
     {'name': 'time_range', 
      'fn': time_range_command,

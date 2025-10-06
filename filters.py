@@ -16,6 +16,7 @@ current_filter_chain = { 'name' : None,
                          'results' : [] }
 
 
+replacing_filter = -1
 
 
 # Pattern-Matching Elements ============================================
@@ -64,27 +65,43 @@ def start ( mentat, command_line ) :
   match = re.match ( pattern, command_line )
   if not match :
     print ( f"filters start error: could not match |{command_line}|" )
-    sys.exit ( 0 )
+    return
   timestamp = f"{match.group(1)} {match.group(2)}" 
   start_filter = new_filter ( 'start' )
   start_filter['args'].append ( timestamp )
-  current_filter_chain['filters'].append ( start_filter )
-  run_filter ( mentat, start_filter )
+
+  if replacing_filter == -1 :   # We are not replacing a filter
+    current_filter_chain['filters'].append ( start_filter )
+    run_filter ( mentat, start_filter )
+  else :
+    current_filter_chain['filters'][replacing_filter] = start_filter
+    current_filter_chain['results'] = []
+    for f in current_filter_chain['filters'] :
+      run_filter ( mentat, f )
+      
 
 
 
 def stop ( mentat, command_line ) :
+  print ( f"entering stop: replacing_filter == {replacing_filter}" )
   pattern = leading_whitespace + "stop" + skip + date_time
 
   match = re.match ( pattern, command_line )
   if not match :
     print ( f"filters stop error: could not match |{command_line}|" )
-    sys.exit ( 0 )
+    return
   timestamp = f"{match.group(1)} {match.group(2)}" 
   stop_filter = new_filter ( 'stop' )
   stop_filter['args'].append(timestamp)
-  current_filter_chain['filters'].append ( stop_filter )
-  run_filter ( mentat, stop_filter )
+
+  if replacing_filter == -1 :   # We are not replacing a filter
+    current_filter_chain['filters'].append ( stop_filter )
+    run_filter ( mentat, stop_filter )
+  else :
+    current_filter_chain['filters'][replacing_filter] = stop_filter
+    current_filter_chain['results'] = []
+    for f in current_filter_chain['filters'] :
+      run_filter ( mentat, f )
 
 
 
@@ -98,6 +115,15 @@ def grep ( mentat, command_line ) :
   grep_filter['args'].append(search_word)
   current_filter_chain['filters'].append ( grep_filter )
   run_filter ( mentat, grep_filter )
+
+  if replacing_filter == -1 :   # We are not replacing a filter
+    current_filter_chain['filters'].append ( grep_filter )
+    run_filter ( mentat, grep_filter )
+  else :
+    current_filter_chain['filters'][replacing_filter] = grep_filter
+    current_filter_chain['results'] = []
+    for f in current_filter_chain['filters'] :
+      run_filter ( mentat, f )
 
 
 
