@@ -60,9 +60,9 @@ def replace_command ( mentat, command_line ) :
     print ( f"There are {len(filters.current_filter_chain['filters'])} filters in the current filter chain." )
     return
   
-  print ( f"Replacing filter {n} please enter a filter command" )
   filters.replacing_filter = n
-  print ( f"replace_command: set filters.replacing_filter to {filters.replacing_filter}" )
+  print ( f"Replacing filter {n} please enter a filter command" )
+  print ( f"replace_command: it will replace filter {n}." )
 
 
 
@@ -89,6 +89,26 @@ def show_filter_command ( mentat, _ ) :
     count += 1
   print ( ' ' )
 
+
+
+def save_command ( mentat, command_line ) :
+  if len(filters.current_filter_chain['filters']) == 0 :
+    print ( "\nThere is no current filter chain to save." )
+    return
+  words = command_line.split()
+  if len(words) != 2 :
+    print ( "\n    Usage: save NAME" )
+    return
+  filter_chain_name = words[1]
+  print ( f"filter_chain_name: {filter_chain_name}" )
+  filters.current_filter_chain['name'] = filter_chain_name
+  filters.filter_chains.append(filters.current_filter_chain)
+  filters.current_filter_chain = filters.new_filter_chain()
+
+  print ( "\nSaved Filter Chains:" )
+  for saved_filter in filters.filter_chains :
+    print ( f"    {saved_filter['name']}" )
+  print ( " " )
 
 
 def show_help ( mentat, _ ) :
@@ -155,6 +175,11 @@ commands = [
      'fn'  : replace_command,
      'args' : 'int',
      'description' : 'replace the Nth filter of your current filter chain',
+    },
+    {'name': 'save',
+     'fn'  : save_command,
+     'args' : 'name',
+     'description' : 'name and save the current filter chain',
     },
     {'name': 'show_filter_chain',
      'fn'  : show_filter_command,

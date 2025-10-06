@@ -8,12 +8,19 @@ from   datetime import datetime, timezone
 
 
 
+filter_chains = []
+
 
 # The result list is not a copy of all the filtered events.
 # It is just their index numbers in the Mentat list of all events.
-current_filter_chain = { 'name' : None, 
-                         'filters' : [],
-                         'results' : [] }
+def new_filter_chain():
+  return {
+           'name'    : None,
+           'filters' : [],
+           'results' : []
+         }
+
+current_filter_chain = new_filter_chain()
 
 
 replacing_filter = -1
