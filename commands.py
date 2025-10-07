@@ -129,6 +129,43 @@ def restore_command ( mentat, command_line ) :
 
 
 
+def overview_command ( mentat, _ ) :
+  print ( "\nData Overview" )
+  print ( "----------------------------" )
+
+  n_events = len(mentat['events'])
+  print ( f"\nThere are {n_events} events." )
+  print ( f"Starting at {mentat['events'] [0]['timestamp'].split('.')[0]}" )
+  print ( f"Ending   at {mentat['events'][-1]['timestamp'].split('.')[0]}" )
+  print ( " " )
+
+  error_count = 0
+  for event in mentat['events'] :
+    if 'error' in event['line'].lower() :
+      error_count += 1
+  print ( f"There are {error_count} errors." )
+  print ( " " )
+
+  for site in mentat['sites'] :
+    print ( f"site: {site['name']}" )
+    for router in site['routers'] :
+      print ( f"  router: {router['name']}" )
+      n_current_events  = len(router['current_events'])
+      n_previous_events = len(router['previous_events'])
+      if n_previous_events > 0 :
+        start =  router['previous_events'] [0]['timestamp']
+        stop  =  router['previous_events'][-1]['timestamp']
+        print ( f"    {n_previous_events} events from {start.split('.')[0]} to {stop.split('.')[0]} " )
+
+      start =  router['current_events'] [0]['timestamp']
+      stop  =  router['current_events'][-1]['timestamp']
+      print ( f"    {n_current_events} events from {start.split('.')[0]} to {stop.split('.')[0]} " )
+  
+
+  print ( " " )
+
+
+
 def show_help ( mentat, _ ) :
   for command in commands :
     print ( f"{command['name']} {command['args']}")
@@ -183,6 +220,11 @@ commands = [
      'fn': filters.list_filtered_results,
      'args' :  ' ',
      'description' : 'show results of current filter chain',
+    },
+    {'name': 'overview',      
+     'fn': overview_command,
+     'args' : ' ',
+     'description' : 'show overview of data',
     },
     {'name': 'quit',       
      'fn': quit_command,
