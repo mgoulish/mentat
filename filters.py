@@ -90,7 +90,6 @@ def start ( mentat, command_line ) :
 
 
 def stop ( mentat, command_line ) :
-  print ( f"entering stop: replacing_filter == {replacing_filter}" )
   pattern = leading_whitespace + "stop" + skip + date_time
 
   match = re.match ( pattern, command_line )
@@ -120,8 +119,6 @@ def grep ( mentat, command_line ) :
   search_word = words[1]
   grep_filter = new_filter ( 'grep' )
   grep_filter['args'].append(search_word)
-  current_filter_chain['filters'].append ( grep_filter )
-  run_filter ( mentat, grep_filter )
 
   if replacing_filter == -1 :   # We are not replacing a filter
     current_filter_chain['filters'].append ( grep_filter )

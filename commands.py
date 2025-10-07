@@ -3,6 +3,7 @@
 import sys
 import os
 import pprint
+import copy
 
 import filters
 
@@ -91,6 +92,7 @@ def show_filter_command ( mentat, _ ) :
 
 
 
+# Name and save the current filter chain.
 def save_command ( mentat, command_line ) :
   if len(filters.current_filter_chain['filters']) == 0 :
     print ( "\nThere is no current filter chain to save." )
@@ -102,13 +104,29 @@ def save_command ( mentat, command_line ) :
   filter_chain_name = words[1]
   print ( f"filter_chain_name: {filter_chain_name}" )
   filters.current_filter_chain['name'] = filter_chain_name
-  filters.filter_chains.append(filters.current_filter_chain)
+  filters.filter_chains.append(copy.deepcopy(filters.current_filter_chain))
   filters.current_filter_chain = filters.new_filter_chain()
 
   print ( "\nSaved Filter Chains:" )
   for saved_filter in filters.filter_chains :
     print ( f"    {saved_filter['name']}" )
   print ( " " )
+
+
+
+def restore_command ( mentat, command_line ) :
+  words = command_line.split()
+  if len(words) != 2 :
+    print ( "\n    Usage: restore NAME" )
+    return
+  filter_chain_name = words[1]
+  for fc in filters.filter_chains : 
+    if filter_chain_name == fc['name'] :
+      filters.current_filter_chain = copy.deepcopy(fc)
+      print ( f"\nrestored filter chain '{fc['name']}'" )
+      return
+  print ( f"can't find filter chain '{fc['name']}'" )
+
 
 
 def show_help ( mentat, _ ) :
@@ -175,6 +193,11 @@ commands = [
      'fn'  : replace_command,
      'args' : 'int',
      'description' : 'replace the Nth filter of your current filter chain',
+    },
+    {'name': 'restore',
+     'fn'  : restore_command,
+     'args' : 'name',
+     'description' : 'restore a saved filter chain to be current',
     },
     {'name': 'save',
      'fn'  : save_command,
