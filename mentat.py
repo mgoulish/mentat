@@ -6,8 +6,8 @@ import re
 from   datetime import datetime, timezone
 import pprint
 
+import new
 import commands
-
 
 
 
@@ -16,72 +16,6 @@ def get_dirs ( root ) :
     dir for dir in os.listdir ( root )
       if os.path.isdir ( os.path.join (root, dir) )
   ]
-
-
-
-# Expected format: 2025-09-16 04:22:22.956513
-def string_to_microseconds_since_epoch ( s ):
-    dt = datetime.strptime(s, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc)
-    return int(dt.timestamp() * 1_000_000)
-
-
-
-def new_mentat ( root ) :
-  keys = [ 'root',
-           'sites',
-           'events' ]
-  mentat = dict.fromkeys ( keys, None )
-  mentat['root']   = root
-  mentat['sites']  = []
-  mentat['events'] = []
-  print ( f"mentat info: new mentat created with root {root}" )
-  return mentat
-
-
-
-def new_site ( name ) :
-  keys = [ 'name',
-           'routers' ]
-  site = dict.fromkeys ( keys, None )
-  site['routers'] = []
-  site['name'] = name
-  print ( f"mentat info: new site created with name {name}" )
-  return site
-
-
-
-def new_router ( name, site ) :
-  keys = [ 'name',
-           'current_events',
-           'previous_events',
-           'site' ]
-  router = dict.fromkeys ( keys, None )
-  router['name']            = name
-  router['site']            = site
-  router['current_events']  = []
-  router['previous_events'] = []
-  print ( f"mentat info: new router created with name {name}" )
-  return router
-
-
-
-def new_event ( log_line, file_path, line_number, timestamp, router, site ) :
-  keys = [ 'line',
-           'file_path',
-           'line_number',
-           'timestamp',
-           'micros',
-           'router',
-           'id'  ]
-  line = dict.fromkeys ( keys, None )
-  line['line']        = log_line
-  line['file_path']   = file_path
-  line['line_number'] = line_number
-  line['timestamp']   = timestamp
-  line['router']      = router
-  line['site']        = site
-  line['micros']      = string_to_microseconds_since_epoch ( timestamp )
-  return line
 
 
 
@@ -101,7 +35,12 @@ def read_router_log ( mentat, router, log_file_path, line_list, router_name_pref
       match = re.match ( timestamp_regex, line_str )
       if match :
         line_count += 1
-        line = new_event ( line_str, log_file_path, line_count, match.group(1), router_name, router['site'] )
+        line = new.new_event ( 'log_line', match.group(1) )
+        line['line']        = line_str
+        line['file_path']   = log_file_path
+        line['line_number'] = line_count
+        line['router']      = router_name
+        line['site']        = router['site']
         line_list.append ( line )
         # Also append this line to the grand top-level list
         mentat['events'].append ( line )
@@ -131,13 +70,13 @@ def print_router_events ( mentat ) :
 def read_events ( mentat ) :
   site_names = get_dirs(mentat['root'])
   for site_name in site_names :
-    site = new_site ( site_name )
+    site = new.new_site ( site_name )
     mentat['sites'].append(site)
     pods_path = f"{root}/{site_name}/pods"
     pod_names = get_dirs(pods_path)
     for pod_name in pod_names :
       if pod_name.startswith('skupper-router') :
-        router = new_router ( pod_name, site_name )
+        router = new.new_router ( pod_name, site_name )
         site['routers'].append ( router )
         logs_path = f"{pods_path}/{pod_name}/logs"
         file_names = os.listdir(logs_path)
@@ -177,7 +116,7 @@ def read_events ( mentat ) :
 #  Main
 #================================================================
 root   =  sys.argv[1]
-mentat = new_mentat ( root )
+mentat = new.new_mentat ( root )
 
 read_events ( mentat )
 print ( f"mentat now has {len(mentat['events'])} total events" )

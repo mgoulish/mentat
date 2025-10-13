@@ -6,6 +6,7 @@ import pprint
 import copy
 
 import filters
+import new
 
 
 
@@ -105,7 +106,7 @@ def save_command ( mentat, command_line ) :
   print ( f"filter_chain_name: {filter_chain_name}" )
   filters.current_filter_chain['name'] = filter_chain_name
   filters.filter_chains.append(copy.deepcopy(filters.current_filter_chain))
-  filters.current_filter_chain = filters.new_filter_chain()
+  filters.current_filter_chain = new.new_filter_chain()
 
   print ( "\nSaved Filter Chains:" )
   for saved_filter in filters.filter_chains :
