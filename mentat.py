@@ -8,6 +8,7 @@ import pprint
 
 import new
 import commands
+import config
 
 
 
@@ -70,7 +71,9 @@ def print_router_events ( mentat ) :
 def read_events ( mentat ) :
   site_names = get_dirs(mentat['root'])
   for site_name in site_names :
-    site = new.new_site ( site_name )
+    site_root = f"{mentat['root']}/{site_name}"
+    print ( f"site_root == {site_root}" )
+    site = new.new_site ( site_name, site_root )
     mentat['sites'].append(site)
     pods_path = f"{root}/{site_name}/pods"
     pod_names = get_dirs(pods_path)
@@ -108,7 +111,6 @@ def read_events ( mentat ) :
   for event in mentat['events'] :
     event['id'] = id
     id += 1
-
   
 
     
@@ -118,6 +120,7 @@ def read_events ( mentat ) :
 root   =  sys.argv[1]
 mentat = new.new_mentat ( root )
 
+config.read_network ( mentat )
 read_events ( mentat )
 print ( f"mentat now has {len(mentat['events'])} total events" )
 #print_router_events ( mentat )

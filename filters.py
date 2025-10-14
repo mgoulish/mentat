@@ -6,21 +6,12 @@ import pprint
 import re
 from   datetime import datetime, timezone
 
+import new
+
 
 
 filter_chains = []
-
-
-# The result list is not a copy of all the filtered events.
-# It is just their index numbers in the Mentat list of all events.
-def new_filter_chain():
-  return {
-           'name'    : None,
-           'filters' : [],
-           'results' : []
-         }
-
-current_filter_chain = new_filter_chain()
+current_filter_chain = new.new_filter_chain()
 
 
 replacing_filter = -1
@@ -36,13 +27,13 @@ date_time             = date + whitespace + time
 
 
 
-def new_filter ( name ) :
-  keys = [ 'name',
-           'args' ]
-  data_filter = dict.fromkeys ( keys, None )
-  data_filter['name'] = name
-  data_filter['args'] = []
-  return data_filter
+#def new_filter ( name ) :
+  #keys = [ 'name',
+           #'args' ]
+  #data_filter = dict.fromkeys ( keys, None )
+  #data_filter['name'] = name
+  #data_filter['args'] = []
+  #return data_filter
 
 
 
@@ -74,7 +65,7 @@ def start ( mentat, command_line ) :
     print ( f"filters start error: could not match |{command_line}|" )
     return
   timestamp = f"{match.group(1)} {match.group(2)}" 
-  start_filter = new_filter ( 'start' )
+  start_filter = new.new_filter ( 'start' )
   start_filter['args'].append ( timestamp )
 
   if replacing_filter == -1 :   # We are not replacing a filter
@@ -88,7 +79,6 @@ def start ( mentat, command_line ) :
       
 
 
-
 def stop ( mentat, command_line ) :
   pattern = leading_whitespace + "stop" + skip + date_time
 
@@ -97,7 +87,7 @@ def stop ( mentat, command_line ) :
     print ( f"filters stop error: could not match |{command_line}|" )
     return
   timestamp = f"{match.group(1)} {match.group(2)}" 
-  stop_filter = new_filter ( 'stop' )
+  stop_filter = new.new_filter ( 'stop' )
   stop_filter['args'].append(timestamp)
 
   if replacing_filter == -1 :   # We are not replacing a filter
@@ -117,7 +107,7 @@ def grep ( mentat, command_line ) :
     print ( "put a word on the commad line to grep for" )
     return
   search_word = words[1]
-  grep_filter = new_filter ( 'grep' )
+  grep_filter = new.new_filter ( 'grep' )
   grep_filter['args'].append(search_word)
 
   if replacing_filter == -1 :   # We are not replacing a filter
@@ -134,7 +124,6 @@ def grep ( mentat, command_line ) :
 # This runs only the latest filter defined by the user.
 # Previous ones in the current chain have already been run
 # and the cumulative result is already in the current result list.
-
 def run_filter ( mentat, f ) :
   # If we have no current result list, that means we 
   # have not run any filters yet.
@@ -156,7 +145,6 @@ def run_filter ( mentat, f ) :
           new_result_list.append(i)        
       print ( f"after start filter: {len(new_result_list)} events" )
 
-
     case 'stop' :
       print ( "running filter 'stop'" )
       stop_micros = string_to_microseconds_since_epoch(f['args'][0])
@@ -165,7 +153,6 @@ def run_filter ( mentat, f ) :
         if event['micros'] < stop_micros :
           new_result_list.append(i)        
       print ( f"after stop filter: {len(new_result_list)} events" )
-
 
     case 'grep' :
       print ( "running filter 'grep'" )
@@ -177,8 +164,6 @@ def run_filter ( mentat, f ) :
         if search_word.lower() in line.lower() :
           new_result_list.append(i)        
       print ( f"after grep filter: {len(new_result_list)} events" )
-          
-
 
     case _ :
       print (f"unknown filter name: {f['name']}")

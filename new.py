@@ -5,6 +5,8 @@ import os
 import re
 from   datetime import datetime, timezone
 
+import new
+
 
 
 # Expected format: 2025-09-16 04:22:22.956513
@@ -17,7 +19,8 @@ def string_to_microseconds_since_epoch ( s ):
 def new_mentat ( root ) :
   keys = [ 'root',
            'sites',
-           'events' ]
+           'events',
+           'skstats' ]
   mentat = dict.fromkeys ( keys, None )
   mentat['root']   = root
   mentat['sites']  = []
@@ -27,12 +30,22 @@ def new_mentat ( root ) :
 
 
 
-def new_site ( name ) :
+def new_site ( name, root ) :
   keys = [ 'name',
-           'routers' ]
+           'routers',
+           'ingress-host',
+           'root',
+           'service_controller',
+           'listeners',
+           'connectors' ]
   site = dict.fromkeys ( keys, None )
-  site['routers'] = []
-  site['name'] = name
+  site [ 'routers']     = []
+  site [ 'name']        = name
+  site [ 'root' ]       = root
+  site [ 'routers' ]    = []
+  site [ 'listeners' ]  = []
+  site [ 'connectors' ] = []
+
   print ( f"mentat info: new site created with name {name}" )
   return site
 
@@ -40,9 +53,11 @@ def new_site ( name ) :
 
 def new_router ( name, site ) :
   keys = [ 'name',
+           'path',
            'current_events',
            'previous_events',
-           'site' ]
+           'site',
+           'ip' ]
   router = dict.fromkeys ( keys, None )
   router['name']            = name
   router['site']            = site
@@ -50,6 +65,30 @@ def new_router ( name, site ) :
   router['previous_events'] = []
   print ( f"mentat info: new router created with name {name}" )
   return router
+
+
+
+def new_listener ( ) :
+  keys     = [ 'name', 'port', 'role' ]
+  listener = dict.fromkeys ( keys, None )
+  listener['role'] = 'normal'   # Assume this is the default
+  return listener
+
+
+
+def new_connector ( ) :
+  keys     = [ 'host', 'name', 'port', 'role' ]
+  connector = dict.fromkeys ( keys, None )
+  connector['role'] = 'normal'   # Assume this is the default
+  return connector
+
+
+
+def new_service_controller ( ) :
+  keys = [ "name",
+           "pod_path",
+           "pod_ip" ]
+  return dict.fromkeys ( keys, None )
 
 
 
