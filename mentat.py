@@ -5,10 +5,12 @@ import os
 import re
 from   datetime import datetime, timezone
 import pprint
+import cmd
 
 import new
-import commands
 import config
+from CLI import MentatCLI
+
 
 
 
@@ -75,7 +77,7 @@ def read_events ( mentat ) :
     print ( f"site_root == {site_root}" )
     site = new.new_site ( site_name, site_root )
     mentat['sites'].append(site)
-    pods_path = f"{root}/{site_name}/pods"
+    pods_path = f"{mentat['root']}/{site_name}/pods"
     pod_names = get_dirs(pods_path)
     for pod_name in pod_names :
       if pod_name.startswith('skupper-router') :
@@ -117,13 +119,30 @@ def read_events ( mentat ) :
 #================================================================
 #  Main
 #================================================================
-root   =  sys.argv[1]
-mentat = new.new_mentat ( root )
 
-config.read_network ( mentat )
-read_events ( mentat )
-print ( f"mentat now has {len(mentat['events'])} total events" )
-#print_router_events ( mentat )
+def main ( ) :
+  root   =  sys.argv[1]
+  mentat = new.new_mentat ( root )
 
-commands.accept_commands ( mentat )
+  config.read_network ( mentat )
+  read_events ( mentat )
+  print ( f"mentat now has {len(mentat['events'])} total events" )
+  #print_router_events ( mentat )
+
+  cli = MentatCLI(mentat)
+
+  try:
+    cli.cmdloop()
+  except KeyboardInterrupt:
+    print("\nInterrupted. Exiting...")
+  except EOFError:
+    print("\nGoodbye!")
+
+
+
+if __name__ == '__main__':
+  main()
+
+
+
 
