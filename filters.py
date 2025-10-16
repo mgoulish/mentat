@@ -27,16 +27,6 @@ date_time             = date + whitespace + time
 
 
 
-#def new_filter ( name ) :
-  #keys = [ 'name',
-           #'args' ]
-  #data_filter = dict.fromkeys ( keys, None )
-  #data_filter['name'] = name
-  #data_filter['args'] = []
-  #return data_filter
-
-
-
 # Expected format: 2025-09-16 04:22:22.956513
 def string_to_microseconds_since_epoch ( s ):
     #dt = datetime.strptime(s, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc)
@@ -45,7 +35,7 @@ def string_to_microseconds_since_epoch ( s ):
 
 
 
-def list_filtered_results ( mentat, _ ) :
+def list_filtered_results ( mentat ) :
   if len(current_filter_chain['filters']) == 0 :
     for event in mentat['events'] :
       print ( '\n' )
@@ -58,7 +48,7 @@ def list_filtered_results ( mentat, _ ) :
 
 
 def start ( mentat, command_line ) :
-  pattern = leading_whitespace + "start" + skip + date_time
+  pattern = leading_whitespace + date_time
 
   match = re.match ( pattern, command_line )
   if not match :
@@ -80,7 +70,7 @@ def start ( mentat, command_line ) :
 
 
 def stop ( mentat, command_line ) :
-  pattern = leading_whitespace + "stop" + skip + date_time
+  pattern = leading_whitespace + date_time
 
   match = re.match ( pattern, command_line )
   if not match :
