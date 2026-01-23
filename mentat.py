@@ -3,22 +3,16 @@
 from   datetime import datetime, timezone
 import argparse
 import cmd
-import inspect
 import os
 import pprint
 import re
 import sys
 
+import debug
 import new
 import config
 from CLI import MentatCLI
 
-
-show_info = False
-def info ( s ) :
-  if show_info :
-    caller = inspect.stack()[1].function
-    print ( f"mentat info: {caller}: {s}" )
 
 
 def get_dirs ( root ) :
@@ -43,7 +37,7 @@ def read_router_log ( args, mentat, router, log_file_path, line_list, router_nam
   else :
     router_name = router['name']
 
-  info ( f"router: {router_name} file: {log_file_path}" )
+  debug.info ( f"router: {router_name} file: {log_file_path}" )
   timestamp_regex = r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6})'
   line_count = 0
   with open(log_file_path) as f:
@@ -62,7 +56,7 @@ def read_router_log ( args, mentat, router, log_file_path, line_list, router_nam
         line_list.append ( line )
         # Also append this line to the grand top-level list
         mentat['events'].append ( line )
-  info ( f"read {line_count} lines" )
+  debug.info ( f"read {line_count} lines" )
 
 
 
@@ -89,7 +83,7 @@ def read_events ( args, mentat ) :
   site_names = get_dirs(mentat['root'])
   for site_name in site_names :
     site_root = f"{mentat['root']}/{site_name}"
-    info ( f"site_root == {site_root}" )
+    debug.info ( f"site_root == {site_root}" )
 
     site = get_site ( mentat, site_name )
     if site == None :
@@ -118,14 +112,14 @@ def read_events ( args, mentat ) :
             # since the events will all eventually be sorted
             # into chronological order.
             if basename == 'router-logs-previous.txt' :
-              info ( f"reading previous events for router {router['name']}" )
+              debug.info ( f"reading previous events for router {router['name']}" )
               read_router_log ( args, mentat, router, file_name, router['previous_events'], 'previous' )  
             elif basename == 'router-logs.txt' :
-              info ( f"reading latest events for router {router['name']}" )
+              debug.info ( f"reading latest events for router {router['name']}" )
               read_router_log ( args, mentat, router, file_name, router['current_events'], None )  
 
   # Sort the unified list in chronological order
-  info ( "sorting events" )
+  debug.info ( "sorting events" )
   sorted_events = sorted(mentat['events'], key=lambda x: x['micros'])
   mentat['events'] = sorted_events
 
@@ -147,15 +141,13 @@ def main ( ) :
   parser.add_argument("--info", action="store_true", help="Print info messages")
   args = parser.parse_args()
 
-  global show_info 
-  show_info = args.info
-  print ( f"show_info == {show_info}" )
+  debug.show_info = args.info
 
   mentat = new.new_mentat ( args.root )
 
   config.read_network ( mentat )
   read_events ( args, mentat )
-  info ( f"mentat now has {len(mentat['events'])} total events" )
+  debug.info ( f"mentat now has {len(mentat['events'])} total events" )
   #print_router_events ( mentat )
 
   cli = MentatCLI(mentat)
