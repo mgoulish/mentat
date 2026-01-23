@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 
-import sys
-import os
-import re
 from   datetime import datetime, timezone
-import pprint
+import argparse
 import cmd
+import inspect
+import os
+import pprint
+import re
+import sys
 
 import new
 import config
 from CLI import MentatCLI
 
 
+show_info = False
+def info ( s ) :
+  if show_info :
+    caller = inspect.stack()[1].function
+    print ( f"mentat info: {caller}: {s}" )
 
 
 def get_dirs ( root ) :
@@ -22,13 +29,21 @@ def get_dirs ( root ) :
 
 
 
-def read_router_log ( mentat, router, log_file_path, line_list, router_name_prefix ) :
+def get_site ( mentat, site_name ) :
+  for s in mentat['sites'] :
+    if s.get('name') == site_name:
+      return s
+  return None
+
+
+
+def read_router_log ( args, mentat, router, log_file_path, line_list, router_name_prefix ) :
   if router_name_prefix :
     router_name = router_name_prefix + ' ' + router['name']
   else :
     router_name = router['name']
 
-  print ( f"mentat info: read_router_log: router: {router_name} file: {log_file_path}" )
+  info ( f"router: {router_name} file: {log_file_path}" )
   timestamp_regex = r'^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6})'
   line_count = 0
   with open(log_file_path) as f:
@@ -47,7 +62,7 @@ def read_router_log ( mentat, router, log_file_path, line_list, router_name_pref
         line_list.append ( line )
         # Also append this line to the grand top-level list
         mentat['events'].append ( line )
-  print ( f"mentat info: read_router_log: read {line_count} lines" )
+  info ( f"read {line_count} lines" )
 
 
 
@@ -70,13 +85,19 @@ def print_router_events ( mentat ) :
   
 
   
-def read_events ( mentat ) :
+def read_events ( args, mentat ) :
   site_names = get_dirs(mentat['root'])
   for site_name in site_names :
     site_root = f"{mentat['root']}/{site_name}"
-    print ( f"site_root == {site_root}" )
-    site = new.new_site ( site_name, site_root )
-    mentat['sites'].append(site)
+    info ( f"site_root == {site_root}" )
+
+    site = get_site ( mentat, site_name )
+    if site == None :
+      print ( f"mentat error: read_events: Can't find site {site_name}" )
+      sys.exit ( 1 )
+
+    #site = new.new_site ( site_name, site_root )
+    #mentat['sites'].append(site)
     pods_path = f"{mentat['root']}/{site_name}/pods"
     pod_names = get_dirs(pods_path)
     for pod_name in pod_names :
@@ -97,14 +118,14 @@ def read_events ( mentat ) :
             # since the events will all eventually be sorted
             # into chronological order.
             if basename == 'router-logs-previous.txt' :
-              print ( f"mentat info: main: reading previous events for router {router['name']}" )
-              read_router_log ( mentat, router, file_name, router['previous_events'], 'previous' )  
+              info ( f"reading previous events for router {router['name']}" )
+              read_router_log ( args, mentat, router, file_name, router['previous_events'], 'previous' )  
             elif basename == 'router-logs.txt' :
-              print ( f"mentat info: main: reading latest events for router {router['name']}" )
-              read_router_log ( mentat, router, file_name, router['current_events'], None )  
+              info ( f"reading latest events for router {router['name']}" )
+              read_router_log ( args, mentat, router, file_name, router['current_events'], None )  
 
   # Sort the unified list in chronological order
-  print ( f"mentat info: sorting events" )
+  info ( "sorting events" )
   sorted_events = sorted(mentat['events'], key=lambda x: x['micros'])
   mentat['events'] = sorted_events
 
@@ -121,12 +142,20 @@ def read_events ( mentat ) :
 #================================================================
 
 def main ( ) :
-  root   =  sys.argv[1]
-  mentat = new.new_mentat ( root )
+  parser = argparse.ArgumentParser ( description="Mentat helps you investigate large Skupper log files" )
+  parser.add_argument("--root", type=str, help="root dir for the network run. should contain site dirs")
+  parser.add_argument("--info", action="store_true", help="Print info messages")
+  args = parser.parse_args()
+
+  global show_info 
+  show_info = args.info
+  print ( f"show_info == {show_info}" )
+
+  mentat = new.new_mentat ( args.root )
 
   config.read_network ( mentat )
-  read_events ( mentat )
-  print ( f"mentat now has {len(mentat['events'])} total events" )
+  read_events ( args, mentat )
+  info ( f"mentat now has {len(mentat['events'])} total events" )
   #print_router_events ( mentat )
 
   cli = MentatCLI(mentat)

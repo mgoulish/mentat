@@ -93,10 +93,10 @@ def stop ( mentat, command_line ) :
 
 def grep ( mentat, command_line ) :
   words = command_line.split()
-  if len(words) < 2 :
-    print ( "put a word on the commad line to grep for" )
+  if len(words) < 1 :
+    print ( "put a word on the command line to grep for" )
     return
-  search_word = words[1]
+  search_word = words[0]
   grep_filter = new.new_filter ( 'grep' )
   grep_filter['args'].append(search_word)
 

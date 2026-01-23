@@ -25,7 +25,6 @@ def new_mentat ( root ) :
   mentat['root']   = root
   mentat['sites']  = []
   mentat['events'] = []
-  print ( f"mentat info: new mentat created with root {root}" )
   return mentat
 
 
@@ -46,7 +45,6 @@ def new_site ( name, root ) :
   site [ 'listeners' ]  = []
   site [ 'connectors' ] = []
 
-  print ( f"mentat info: new site created with name {name}" )
   return site
 
 
@@ -63,7 +61,6 @@ def new_router ( name, site ) :
   router['site']            = site
   router['current_events']  = []
   router['previous_events'] = []
-  print ( f"mentat info: new router created with name {name}" )
   return router
 
 

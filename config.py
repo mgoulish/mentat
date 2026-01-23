@@ -159,6 +159,7 @@ def read_skupper_internal_yaml ( site, file_name ) :
 
 
 def read_site ( network, path ) :
+  # info ( f"read_site called with path {path}" )
   site_name = path.split('/')[-1]
   site = new.new_site ( site_name, path )
 
