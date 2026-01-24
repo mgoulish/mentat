@@ -5,44 +5,8 @@ import os
 import json
 import pprint
 
+import debug
 import new
-
-
-
-#def new_site ( root ) :
-  #keys = [ 'events',
-           #'raw_events',
-           #'name',
-           #'ingress-host',
-           #'root',
-           #'routers',
-           #'service_controller',
-           #'listeners',
-           #'connectors' ]
-  #site = dict.fromkeys ( keys, None )         
-  #site [ 'root' ]       = root
-  #site [ 'raw_events' ] = []
-  #site [ 'events' ]     = []
-  #site [ 'routers' ]    = []
-  #site [ 'listeners' ]  = []
-  #site [ 'connectors' ] = []
-  #return site
-
-
-
-#def new_router ( ) :
-  #keys = [ "pod_name",
-           #"pod_path",
-           #"ip" ]
-  #return dict.fromkeys ( keys, None )
-
-
-
-#def new_service_controller ( ) :
-  #keys = [ "name",
-           #"pod_path",
-           #"pod_ip" ]
-  #return dict.fromkeys ( keys, None )
 
 
 
@@ -159,7 +123,7 @@ def read_skupper_internal_yaml ( site, file_name ) :
 
 
 def read_site ( network, path ) :
-  # info ( f"read_site called with path {path}" )
+  debug.debug ( f"called with path {path}" )
   site_name = path.split('/')[-1]
   site = new.new_site ( site_name, path )
 

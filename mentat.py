@@ -138,10 +138,14 @@ def read_events ( args, mentat ) :
 def main ( ) :
   parser = argparse.ArgumentParser ( description="Mentat helps you investigate large Skupper log files" )
   parser.add_argument("--root", type=str, help="root dir for the network run. should contain site dirs")
-  parser.add_argument("--info", action="store_true", help="Print info messages")
+  parser.add_argument("--info",  action="store_true", help="Print info messages")
+  parser.add_argument("--debug", action="store_true", help="Print debug messages")
+
   args = parser.parse_args()
 
-  debug.show_info = args.info
+  debug.show_info  = args.info
+  debug.show_debug = args.debug
+
 
   mentat = new.new_mentat ( args.root )
 
