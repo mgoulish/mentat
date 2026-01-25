@@ -8,6 +8,7 @@ import cmd
 from typing import Dict, Any
 
 
+import debug
 import filters
 import new
 
@@ -19,6 +20,10 @@ class MentatCLI(cmd.Cmd):
     self.prompt = '(mentat) '
     self.intro = 'Mentat CLI started. Type help for commands.'
     self.mentat['cli'] = self
+
+
+  def do_q ( self, arg ) :
+    self.do_quit ( arg )
 
 
   def do_quit ( self, arg ) :
@@ -166,17 +171,19 @@ class MentatCLI(cmd.Cmd):
     for site in mentat['sites'] :
       print ( f"site: {site['name']}" )
       for router in site['routers'] :
-        print ( f"  router: {router['name']}" )
+        print ( f"  router: {router['name']} number: {router['number']}" )
         n_current_events  = len(router['current_events'])
         n_previous_events = len(router['previous_events'])
-        if n_previous_events > 0 :
-          start =  router['previous_events'] [0]['timestamp']
-          stop  =  router['previous_events'][-1]['timestamp']
-          print ( f"    {n_previous_events} events from {start.split('.')[0]} to {stop.split('.')[0]} " )
-  
-        start =  router['current_events'] [0]['timestamp']
-        stop  =  router['current_events'][-1]['timestamp']
-        print ( f"    {n_current_events} events from {start.split('.')[0]} to {stop.split('.')[0]} " )
+        debug.debug ( f"current events: {n_current_events}  previous events: {n_previous_events}" )
+        #if n_previous_events > 0 :
+          #start =  router['previous_events'] [0]['timestamp']
+          #stop  =  router['previous_events'][-1]['timestamp']
+          #print ( f"    {n_previous_events} events from {start.split('.')[0]} to {stop.split('.')[0]} " )
+        #
+        #if n_current_events > 0 :
+          #start =  router['current_events'] [0]['timestamp']
+          #stop  =  router['current_events'][-1]['timestamp']
+          #print ( f"    {n_current_events} events from {start.split('.')[0]} to {stop.split('.')[0]} " )
     print ( " " )
   
   

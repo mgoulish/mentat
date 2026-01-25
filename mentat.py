@@ -67,6 +67,7 @@ def print_router_events ( mentat ) :
     print (   site['name']  )
     print ( "========================================================" )
     for router in site['routers'] :
+      print (  "\n----------------------------------------" )
       print ( f"  router:  {router['name']}" )
   
       print ( "\n\nprevious events: " )
@@ -96,6 +97,7 @@ def read_events ( args, mentat ) :
     pod_names = get_dirs(pods_path)
     for pod_name in pod_names :
       if pod_name.startswith('skupper-router') :
+        debug.debug ( f"Making new router {pod_name}" )
         router = new.new_router ( pod_name, site_name )
         site['routers'].append ( router )
         logs_path = f"{pods_path}/{pod_name}/logs"
@@ -112,11 +114,14 @@ def read_events ( args, mentat ) :
             # since the events will all eventually be sorted
             # into chronological order.
             if basename == 'router-logs-previous.txt' :
-              debug.info ( f"reading previous events for router {router['name']}" )
+              debug.debug ( f"reading previous events for router {router['name']}" )
               read_router_log ( args, mentat, router, file_name, router['previous_events'], 'previous' )  
             elif basename == 'router-logs.txt' :
-              debug.info ( f"reading latest events for router {router['name']}" )
+              debug.debug ( f"reading latest events for router {router['name']} from file {file_name}" )
               read_router_log ( args, mentat, router, file_name, router['current_events'], None )  
+              debug.debug ( f"read {len(router['current_events'])} current events" )
+          #print ( "\n\nvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv" )
+          #print ( f"router {pod_name} : {router}" )
 
   # Sort the unified list in chronological order
   debug.info ( "sorting events" )

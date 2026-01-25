@@ -5,6 +5,7 @@ import os
 import re
 from   datetime import datetime, timezone
 
+import debug
 import new
 
 
@@ -30,6 +31,7 @@ def new_mentat ( root ) :
 
 
 def new_site ( name, root ) :
+  debug.debug ( f"making new site {name} at root {root}" )
   keys = [ 'name',
            'routers',
            'ingress-host',
@@ -48,9 +50,25 @@ def new_site ( name, root ) :
   return site
 
 
+def call_counter():
+    # Initialize count attribute if it doesn't exist
+    if not hasattr(call_counter, 'count'):
+        call_counter.count = 0
+    # Increment the count
+    call_counter.count += 1
+    # Print the current count
+    print(f"The function has been called {call_counter.count} times.")
+
 
 def new_router ( name, site ) :
+  if not hasattr(new_router, 'count'):
+    new_router.count = 0
+  new_router.count += 1
+
+  debug.debug ( f"Making new router {name} number {new_router.count}" )
+
   keys = [ 'name',
+           'number',
            'path',
            'current_events',
            'previous_events',
@@ -58,6 +76,7 @@ def new_router ( name, site ) :
            'ip' ]
   router = dict.fromkeys ( keys, None )
   router['name']            = name
+  router['number']          = new_router.count
   router['site']            = site
   router['current_events']  = []
   router['previous_events'] = []

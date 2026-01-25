@@ -4,4 +4,4 @@
 
 #./mentat.py  --root /home/mick/data/mentat_test_data/bell_canada/bc_1/2025_08_01
 
-./mentat.py  --root /home/mick/data/mentat_test_data/bell_canada/bc_2/2025_09_08
+./mentat.py  --root /home/mick/data/mentat_test_data/bell_canada/bc_2/2025_09_08 --debug

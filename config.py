@@ -41,10 +41,11 @@ def get_site_routers ( site_path ) :
                 network_status_str = annotations['k8s.v1.cni.cncf.io/network-status']
                 network_status = json.loads(network_status_str)
                 ip = next((item.get('ips', []) for item in network_status), [])
-                router = new.new_router ( pod, site_name )
-                router['pod_path'] = pod_path
-                router['ip']       = ip
-                routers.append ( router )
+                debug.debug ( f"Making new router {pod}" )
+                #router = new.new_router ( pod, site_name )
+                #router['pod_path'] = pod_path
+                #router['ip']       = ip
+                #routers.append ( router )
   return routers
 
 
@@ -67,22 +68,6 @@ def get_service_controller ( site_path, site_name ) :
               service_controller['name']     = f"{sc_path} {site_name}"
 
   return service_controller
-
-
-
-#def new_listener ( ) :
-  #keys     = [ 'name', 'port', 'role' ]
-  #listener = dict.fromkeys ( keys, None )
-  #listener['role'] = 'normal'   # Assume this is the default
-  #return listener
-#
-#
-#
-#def new_connector ( ) :  
-  #keys     = [ 'host', 'name', 'port', 'role' ]
-  #connector = dict.fromkeys ( keys, None )
-  #connector['role'] = 'normal'   # Assume this is the default
-  #return connector
 
 
 
