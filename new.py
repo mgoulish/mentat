@@ -21,11 +21,13 @@ def new_mentat ( root ) :
   keys = [ 'root',
            'sites',
            'events',
-           'skstats' ]
+           'skstats',
+           'context' ]
   mentat = dict.fromkeys ( keys, None )
-  mentat['root']   = root
-  mentat['sites']  = []
-  mentat['events'] = []
+  mentat['root']    = root
+  mentat['sites']   = []
+  mentat['events']  = []
+  mentat['context'] = new_context()
   return mentat
 
 
@@ -129,6 +131,29 @@ def new_event ( event_type, timestamp ) :
   return event
 
 
+
+# The context stores the history of the user's interaction
+# with Mentat. It allows the 
+def new_context ( ) :
+  keys = [ 'events' ]
+  context = dict.fromkeys ( keys, None )
+  context['events'] = []
+  return context
+
+
+
+def new_context_event ( event_type, arg ) :
+  keys = [ 'type',
+           'arg',
+           'result' ]
+  context_event = dict.fromkeys ( keys, None )
+  context_event['type']   = event_type
+  context_event['arg']    = arg
+  context_event['result'] = {}
+  return context_event
+
+
+
 # The result list is not a copy of all the filtered events.
 # It is just their index numbers in the Mentat list of all events.
 def new_filter_chain():
@@ -137,6 +162,7 @@ def new_filter_chain():
            'filters' : [],
            'results' : []
          }
+
 
 
 def new_filter ( name ) :

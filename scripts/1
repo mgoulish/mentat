@@ -1,2 +1,5 @@
 overview
+echo We have a significant number of errors!
+echo Let's list out their times.
 wait
+errors
