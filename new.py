@@ -152,26 +152,3 @@ def new_context_event ( event_type, arg ) :
   context_event['result'] = {}
   return context_event
 
-
-
-# The result list is not a copy of all the filtered events.
-# It is just their index numbers in the Mentat list of all events.
-def new_filter_chain():
-  return {
-           'name'    : None,
-           'filters' : [],
-           'results' : []
-         }
-
-
-
-def new_filter ( name ) :
-  keys = [ 'name',
-           'args' ]
-  data_filter = dict.fromkeys ( keys, None )
-  data_filter['name'] = name
-  data_filter['args'] = []
-  return data_filter
-
-
-
