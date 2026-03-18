@@ -145,6 +145,7 @@ def main ( ) :
   parser.add_argument("--root", type=str, help="root dir for the network run. should contain site dirs")
   parser.add_argument("--info",  action="store_true", help="Print info messages")
   parser.add_argument("--debug", action="store_true", help="Print debug messages")
+  parser.add_argument("--script", type=str, help="Print debug messages")
 
   args = parser.parse_args()
 
@@ -157,9 +158,14 @@ def main ( ) :
   config.read_network ( mentat )
   read_events ( args, mentat )
   debug.info ( f"mentat now has {len(mentat['events'])} total events" )
+
+
   #print_router_events ( mentat )
 
   cli = MentatCLI(mentat)
+
+  if args.script :
+    debug.info ( f"running script {args.script}" )
 
   try:
     cli.cmdloop()
