@@ -159,13 +159,22 @@ def main ( ) :
   read_events ( args, mentat )
   debug.info ( f"mentat now has {len(mentat['events'])} total events" )
 
-
-  #print_router_events ( mentat )
-
   cli = MentatCLI(mentat)
 
   if args.script :
     debug.info ( f"running script {args.script}" )
+    try:
+      with open(args.script, 'r') as f:
+        for line in f:
+          # Strip whitespace and skip empty lines or comments
+          cmd_line = line.strip()
+          if cmd_line and not cmd_line.startswith('#'):
+          # pass each line to the command executer
+            cli.onecmd ( cmd_line )
+    except FileNotFoundError:
+      print(f"Error: Script file '{args.script}' not found.")
+      sys.exit(1)
+
 
   try:
     cli.cmdloop()

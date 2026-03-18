@@ -28,6 +28,10 @@ class MentatCLI(cmd.Cmd):
 
 
 
+  def do_echo ( self, args ) :
+    print ( args )
+    
+
   def do_errors ( self, arg ) :
     mentat = self.mentat
     timestamps = []

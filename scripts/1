@@ -1,5 +1,7 @@
 overview
+echo -------------------------------------------
 echo We have a significant number of errors!
-echo Let's list out their times.
+echo Let's see how they clump together.
+echo -------------------------------------------
 wait
 errors
