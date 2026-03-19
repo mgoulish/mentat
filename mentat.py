@@ -23,14 +23,6 @@ def get_dirs ( root ) :
 
 
 
-def get_site ( mentat, site_name ) :
-  for s in mentat['sites'] :
-    if s.get('name') == site_name:
-      return s
-  return None
-
-
-
 def read_router_log ( args, mentat, router, log_file_path, line_list, router_name_prefix ) :
   if router_name_prefix :
     router_name = router_name_prefix + ' ' + router['name']
@@ -86,20 +78,17 @@ def read_events ( args, mentat ) :
     site_root = f"{mentat['root']}/{site_name}"
     debug.info ( f"site_root == {site_root}" )
 
-    site = get_site ( mentat, site_name )
+    site = config.get_site ( mentat, site_name )
     if site == None :
       print ( f"mentat error: read_events: Can't find site {site_name}" )
       sys.exit ( 1 )
 
-    #site = new.new_site ( site_name, site_root )
-    #mentat['sites'].append(site)
     pods_path = f"{mentat['root']}/{site_name}/pods"
     pod_names = get_dirs(pods_path)
     for pod_name in pod_names :
       if pod_name.startswith('skupper-router') :
         debug.debug ( f"Making new router {pod_name}" )
-        router = new.new_router ( pod_name, site_name )
-        site['routers'].append ( router )
+        router = config.get_router ( mentat, site_name, pod_name )
         logs_path = f"{pods_path}/{pod_name}/logs"
         file_names = os.listdir(logs_path)
         for basename in file_names :

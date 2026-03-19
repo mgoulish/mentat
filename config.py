@@ -4,6 +4,7 @@ import yaml
 import os
 import json
 import pprint
+import sys
 
 import debug
 import new
@@ -18,35 +19,44 @@ def get_dirs ( root ) :
 
 
 
-def get_site_routers ( site_path ) :
-  site_name = site_path.split('/')[-1]
-  #print ( f"get_site_routers {site_path} --> {site_name}" )
-  site_subdirs = get_dirs ( site_path )
-  routers = []
-  if "pods" in site_subdirs :
-    pods_path = f"{site_path}/pods"
-    pods = get_dirs ( pods_path )
-    for pod in pods :
-      #print ( f"pod: {pod} " )
-      if pod.startswith ( "skupper-router" ) :
-        pod_path = f"{pods_path}/{pod}"
-        pod_yaml_file = f"{pod_path}/pod.yaml"
-        with open (pod_yaml_file, 'r') as file:
-          pod_yaml_data = yaml.safe_load ( file )
-          if 'metadata' in pod_yaml_data :
-            metadata = pod_yaml_data['metadata']
-            if 'annotations' in metadata :
-              annotations = metadata['annotations']
-              if 'k8s.v1.cni.cncf.io/network-status' in annotations:
-                network_status_str = annotations['k8s.v1.cni.cncf.io/network-status']
-                network_status = json.loads(network_status_str)
-                ip = next((item.get('ips', []) for item in network_status), [])
-                debug.debug ( f"Making new router {pod}" )
-                #router = new.new_router ( pod, site_name )
-                #router['pod_path'] = pod_path
-                #router['ip']       = ip
-                #routers.append ( router )
-  return routers
+def get_site ( mentat, site_name ) :
+  for s in mentat['sites'] :
+    if s.get('name') == site_name:
+      return s
+  return None
+
+
+def get_router ( mentat, site_name, pod_name ) :
+  for site in mentat['sites'] : 
+    print ( site['name'] )
+    if site['name'] == site_name :
+      for router in site['routers'] :
+        if router['name'] == pod_name :
+          return router
+  return NULL
+  
+
+
+def get_site_routers ( mentat ) :
+  site_names = get_dirs(mentat['root'])
+  for site_name in site_names :
+    site_root = f"{mentat['root']}/{site_name}"
+    debug.info ( f"site_root == {site_root}" )
+
+    site = get_site ( mentat, site_name )
+    if site == None :
+      print ( f"mentat error: get_site_routers: Can't find site {site_name}" )
+      sys.exit ( 1 )
+
+    pods_path = f"{mentat['root']}/{site_name}/pods"
+    pod_names = get_dirs(pods_path)
+    for pod_name in pod_names :
+      if pod_name.startswith('skupper-router') :
+        debug.debug ( f"Making new router {pod_name}" )
+        router = new.new_router ( pod_name, site_name )
+        print ( "get_site_routers: append ", site_name )
+        site['routers'].append ( router )
+        logs_path = f"{pods_path}/{pod_name}/logs"
 
 
 
@@ -107,7 +117,7 @@ def read_skupper_internal_yaml ( site, file_name ) :
 
 
 
-def read_site ( network, path ) :
+def read_site ( mentat, path ) :
   debug.debug ( f"called with path {path}" )
   site_name = path.split('/')[-1]
   site = new.new_site ( site_name, path )
@@ -122,10 +132,9 @@ def read_site ( network, path ) :
   file_name = config_dir + '/skupper-internal.yaml'
   read_skupper_internal_yaml ( site, file_name )
 
-  site['routers']            = get_site_routers ( path )
-  site['service_controller'] = get_service_controller ( path, site['name'] )
+  #site['service_controller'] = get_service_controller ( path, site['name'] )
 
-  network['sites'].append(site)
+  mentat['sites'].append(site)
 
       
 
@@ -137,6 +146,7 @@ def read_network ( mentat ) :
     site_path = os.path.join (root, dir)
     if os.path.isdir ( site_path ) :
       read_site ( mentat, site_path )
+  get_site_routers ( mentat )
 
 
 
