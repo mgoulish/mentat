@@ -45,11 +45,12 @@ def new_site ( name, root ) :
   site [ 'routers']     = []
   site [ 'name']        = name
   site [ 'root' ]       = root
-  site [ 'routers' ]    = []
   site [ 'listeners' ]  = []
   site [ 'connectors' ] = []
 
   return site
+
+
 
 
 def call_counter():

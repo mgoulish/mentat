@@ -131,12 +131,12 @@ def read_site ( network, path ) :
 
 
 
-def read_network ( network ) :
-  root = network['root']
+def read_network ( mentat ) :
+  root = mentat['root']
   for dir in os.listdir ( root ) :
     site_path = os.path.join (root, dir)
     if os.path.isdir ( site_path ) :
-      read_site ( network, site_path )
+      read_site ( mentat, site_path )
 
 
 

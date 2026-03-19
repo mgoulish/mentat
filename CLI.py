@@ -132,6 +132,31 @@ class MentatCLI(cmd.Cmd):
 
 
 
+  def do_sites ( self, arg ) :
+    mentat = self.mentat
+    print(' ')
+    for site in mentat['sites'] :
+      print ( '\nsite :', site['name'], '\n' )
+
+      print ( "  routers :" )
+      for router in site['routers'] :
+        print ( '    ', router['name'] )
+      print(' ')
+
+      print ( "  listeners :" )
+      for listener in site['listeners'] :
+        print ( '    ', listener['name'] )
+      print(' ')
+
+      print ( "  connectors :" )
+      for connector in site['connectors'] :
+        print ( '    ', connector['name'] )
+      print(' ')
+
+    print(' ')
+
+
+
   # This just shows the user the start and stop times 
   # for the current data set.
   def do_range ( self, arg ) :
