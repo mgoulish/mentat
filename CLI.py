@@ -135,12 +135,13 @@ class MentatCLI(cmd.Cmd):
   def do_sites ( self, arg ) :
     mentat = self.mentat
     print(' ')
+    print ( f"in do_sites: there are now {len(mentat['sites'])} sites" )
     for site in mentat['sites'] :
       print ( '\nsite :', site['name'], '\n' )
 
       print ( "  routers :" )
       for router in site['routers'] :
-        print ( '    ', router['name'] )
+        print ( f"    {router['nickname']} ({router['name']})" )
       print(' ')
 
       print ( "  listeners :" )

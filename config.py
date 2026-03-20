@@ -38,10 +38,10 @@ def get_router ( mentat, site_name, pod_name ) :
 
 
 def get_site_routers ( mentat ) :
+  router_count = 0
   site_names = get_dirs(mentat['root'])
   for site_name in site_names :
     site_root = f"{mentat['root']}/{site_name}"
-    debug.info ( f"site_root == {site_root}" )
 
     site = get_site ( mentat, site_name )
     if site == None :
@@ -53,8 +53,9 @@ def get_site_routers ( mentat ) :
     for pod_name in pod_names :
       if pod_name.startswith('skupper-router') :
         debug.debug ( f"Making new router {pod_name}" )
-        router = new.new_router ( pod_name, site_name )
-        print ( "get_site_routers: append ", site_name )
+        router_count += 1
+        nickname = f"R{router_count}"
+        router = new.new_router ( pod_name, site_name, nickname )
         site['routers'].append ( router )
         logs_path = f"{pods_path}/{pod_name}/logs"
 

@@ -145,7 +145,7 @@ def main ( ) :
   mentat = new.new_mentat ( args.root )
 
   config.read_network ( mentat )
-  read_events ( args, mentat )
+  # read_events ( args, mentat )
   debug.info ( f"mentat now has {len(mentat['events'])} total events" )
 
   cli = MentatCLI(mentat)

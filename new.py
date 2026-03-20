@@ -63,7 +63,7 @@ def call_counter():
     print(f"The function has been called {call_counter.count} times.")
 
 
-def new_router ( name, site ) :
+def new_router ( name, site, nickname ) :
   if not hasattr(new_router, 'count'):
     new_router.count = 0
   new_router.count += 1
@@ -71,6 +71,7 @@ def new_router ( name, site ) :
   debug.debug ( f"Making new router {name} number {new_router.count}" )
 
   keys = [ 'name',
+           'nickname',
            'number',
            'path',
            'current_events',
@@ -79,6 +80,7 @@ def new_router ( name, site ) :
            'ip' ]
   router = dict.fromkeys ( keys, None )
   router['name']            = name
+  router['nickname']        = nickname
   router['number']          = new_router.count
   router['site']            = site
   router['current_events']  = []
