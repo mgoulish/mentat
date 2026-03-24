@@ -7,13 +7,7 @@ from   datetime import datetime, timezone
 
 import debug
 import new
-
-
-
-# Expected format: 2025-09-16 04:22:22.956513
-def string_to_microseconds_since_epoch ( s ):
-    dt = datetime.strptime(s, "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=timezone.utc)
-    return int(dt.timestamp() * 1_000_000)
+import utils
 
 
 
@@ -123,7 +117,7 @@ def new_event ( event_type, timestamp ) :
   event = dict.fromkeys ( keys, None )
   event['type']        = event_type
   event['timestamp']   = timestamp
-  event['micros']      = string_to_microseconds_since_epoch ( timestamp )
+  event['micros']      = utils.string_to_microseconds_since_epoch ( timestamp )
   # ID cannot be assigned yet. That is done only at the Mentat level,
   # after all events have been combined into one list.
 
