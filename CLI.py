@@ -81,7 +81,7 @@ class MentatCLI(cmd.Cmd):
     for site in mentat['sites'] :
       print ( f"site: {site['name']}" )
       for router in site['routers'] :
-        print ( f"  router: {router['name']} number: {router['number']}" )
+        print ( f"  router: {router['nickname']} ({router['name']}) " )
         n_current_events  = len(router['current_events'])
         n_previous_events = len(router['previous_events'])
         debug.debug ( f"current events: {n_current_events}  previous events: {n_previous_events}" )
@@ -98,6 +98,33 @@ class MentatCLI(cmd.Cmd):
     print ( " " )
   
   
+
+  def do_events ( self, arg ) :
+    mentat = self.mentat
+    print ( "\n----------------------------" )
+    print ( "Events" )
+    print ( "----------------------------" )
+
+    n_events = len(mentat['events'])
+    print ( f"\nThere are {n_events} events." )
+    print ( f"Starting at {mentat['events'] [0]['timestamp'].split('.')[0]}" )
+    print ( f"Ending   at {mentat['events'][-1]['timestamp'].split('.')[0]}" )
+    print ( " " )
+  
+    for site in mentat['sites'] :
+      print ( f"site: {site['name']}" )
+      for router in site['routers'] :
+        print ( f"  router: {router['nickname']} ({router['name']}) " )
+        n_previous_events = len(router['previous_events'])
+        n_current_events  = len(router['current_events'])
+        print ( f"    previous events: {n_previous_events}" )
+        print ( f"    current events:  {n_current_events}" )
+        if n_previous_events > 0 :
+          for event in router['previous_events'] :
+            pprint.pprint ( event )
+    print ( " " )
+  
+
 
   def do_q ( self, arg ) :
     self.do_quit ( arg )

@@ -21,13 +21,15 @@ def new_mentat ( root ) :
   keys = [ 'root',
            'sites',
            'events',
+           'connectivity_events',
            'skstats',
            'context' ]
   mentat = dict.fromkeys ( keys, None )
-  mentat['root']    = root
-  mentat['sites']   = []
-  mentat['events']  = []
-  mentat['context'] = new_context()
+  mentat['root']                 = root
+  mentat['sites']                = []
+  mentat['events']               = []
+  mentat['connectivity_events']  = []
+  mentat['context']              = new_context()
   return mentat
 
 
@@ -68,11 +70,8 @@ def new_router ( name, site, nickname ) :
     new_router.count = 0
   new_router.count += 1
 
-  debug.debug ( f"Making new router {name} number {new_router.count}" )
-
   keys = [ 'name',
            'nickname',
-           'number',
            'path',
            'current_events',
            'previous_events',
@@ -81,7 +80,6 @@ def new_router ( name, site, nickname ) :
   router = dict.fromkeys ( keys, None )
   router['name']            = name
   router['nickname']        = nickname
-  router['number']          = new_router.count
   router['site']            = site
   router['current_events']  = []
   router['previous_events'] = []
@@ -123,7 +121,7 @@ def new_event ( event_type, timestamp ) :
            'micros',
            'id'  ]
   event = dict.fromkeys ( keys, None )
-  event['type']        = type
+  event['type']        = event_type
   event['timestamp']   = timestamp
   event['micros']      = string_to_microseconds_since_epoch ( timestamp )
   # ID cannot be assigned yet. That is done only at the Mentat level,

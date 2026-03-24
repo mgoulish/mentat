@@ -11,6 +11,7 @@ import sys
 import debug
 import new
 import config
+import connectivity
 from CLI import MentatCLI
 
 
@@ -36,9 +37,9 @@ def read_router_log ( args, mentat, router, log_file_path, line_list, router_nam
     content = f.readlines()
     for line_str in content :
       line_str = line_str.rstrip()
+      line_count += 1
       match = re.match ( timestamp_regex, line_str )
       if match :
-        line_count += 1
         line = new.new_event ( 'log_line', match.group(1) )
         line['line']        = line_str
         line['file_path']   = log_file_path
@@ -87,7 +88,6 @@ def read_events ( args, mentat ) :
     pod_names = get_dirs(pods_path)
     for pod_name in pod_names :
       if pod_name.startswith('skupper-router') :
-        debug.debug ( f"Making new router {pod_name}" )
         router = config.get_router ( mentat, site_name, pod_name )
         logs_path = f"{pods_path}/{pod_name}/logs"
         file_names = os.listdir(logs_path)
@@ -145,8 +145,11 @@ def main ( ) :
   mentat = new.new_mentat ( args.root )
 
   config.read_network ( mentat )
-  # read_events ( args, mentat )
+  read_events ( args, mentat )
+  connectivity.read_connectivity_events ( mentat )
   debug.info ( f"mentat now has {len(mentat['events'])} total events" )
+  print ( "MDEBUG: here are the connectivity events:" )
+  pprint.pprint ( mentat['connectivity_events'] )
 
   cli = MentatCLI(mentat)
 

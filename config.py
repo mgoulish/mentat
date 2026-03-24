@@ -28,7 +28,6 @@ def get_site ( mentat, site_name ) :
 
 def get_router ( mentat, site_name, pod_name ) :
   for site in mentat['sites'] : 
-    print ( site['name'] )
     if site['name'] == site_name :
       for router in site['routers'] :
         if router['name'] == pod_name :
