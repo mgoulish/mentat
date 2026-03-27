@@ -71,6 +71,28 @@ def parse_http_listener(line: str) -> dict:
   return None  # Line didn't match the expected HTTP listener format
 
 
+def parse_listening_for_client (line: str) -> dict | None:
+    # example: 2025-09-16 04:22:22.995325 +0000 ROUTER (info) Listener prd-mc-rs-mdb-1-0-svc:27017: listening for client connections on 0.0.0.0:1024 with backlog 4096
+    # Pattern matches:
+    # - Timestamp (with or without +0000)
+    # - Listener <service>:<target_port>
+    # - listening for client connections on <ip>:<local_port>
+    pattern = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+(?: \+\d{4})?).*?Listener\s+([^:\s]+):(\d+).*?on [^:\s]*:(\d+)'
+    
+    match = re.search(pattern, line)
+    if match:
+        timestamp    = match.group(1)
+        microseconds = utils.string_to_microseconds_since_epoch ( timestamp )
+        return {
+            'type':     'listening_for_client',
+            'timestamp': timestamp,                # full timestamp as it appears
+            'microseconds': microseconds,
+            'service_name': match.group(2),        # e.g. 'prd-mc-rs-mdb-1-0-svc'
+            'target_port': int(match.group(3)),    # e.g. 27017  (the real MongoDB port)
+            'local_port': int(match.group(4))      # e.g. 1024   (the local listening port)
+        }
+    return None
+
 
 def parse_log_line(line: str) -> dict | None:
   # The various parsers return NULL if they don't match the input line.
@@ -79,6 +101,7 @@ def parse_log_line(line: str) -> dict | None:
     parse_configured_connector,   
     parse_configured_listener,     
     parse_http_listener,          
+    parse_listening_for_client,
   ]
 
   for parser in parsers:
